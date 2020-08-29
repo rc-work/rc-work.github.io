@@ -20,7 +20,7 @@
 					<img src="images/nmap.png" alt="nmap" class="inline"/> <br/>
 					
 					Points of interest here are that we have anonymous FTP access, a web server, and some nfs shares. <br/> <br/>
-					FTP was a dead end with nothing inside. And on the website we have a dummy umbraco install. <br/> <br/>
+					FTP was a dead end with nothing inside. And on the website we have a dummy Umbraco install. <br/> <br/>
 					
 					<img src="images/web.PNG" alt="umbraco" class="inline"/> <br/> <br/> <br/>
 					
@@ -31,6 +31,17 @@
 					We can see we have a site_backups share that is accessible. So I copied it over to kali to check it out. <br/> <br/>
 					
 					<img src="images/nfs-backup.PNG" alt="nfs" class="inline"/> <br/> <br/> <br/>
+					
+					Some research into Umbraco showed that it stores its database in a .sdf file inside the App_Data directory. <br/>
+					We can pull out the admin username and hash with a simple grep command. <br/>
+					
+					<img src="images/hash.PNG" alt="hash" class="inline"/> <br/> <br/> <br/>
+					
+					This hash is easily crackable with something like JohnTheRipper. I threw it at the rockyou.txt wordlist and we get <br/> <br/>
+					
+					<b> admin@htb.local : baconandcheese </b>
+					
+					
 					
 					
 					
