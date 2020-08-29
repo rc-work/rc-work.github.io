@@ -12,15 +12,25 @@
         		<h1>HackTheBox Remote Writeup</h1>
 				<p> One of my favorite past times has turned into solving boxes over on hackthebox.eu.<br/> 
 					This writeup is for an easy box by the name of remote, that had quite a few good lessons involved.<br/> <br/>
+					
 					<img src="images/remote.png" alt="remote" class="inline"/> <br/> <br/> <br/>
+					
 					We start out with the usual nmap scan <br/> <br/>
+					
 					<img src="images/nmap.png" alt="nmap" class="inline"/> <br/>
+					
 					Points of interest here are that we have anonymous ftp access, a web server, and some nfs shares. <br/> <br/>
 					FTP was a dead end with nothing inside. And on the website we have a dummy umbraco install. <br/> <br/>
+					
 					<img src="images/web.png" alt="umbraco" class="inline"/> <br/> <br/> <br/>
-					The webserver was pretty boring with not a whole lot going on. So I decided to checkout the nfs shares <br/> <br/>
+					
+					The webserver was pretty boring with not a whole lot going on. So I decided to checkout the nfs shares. <br/> <br/>
+					
 					<img src="images/mounts.png" alt="nfs" class="inline"/> <br/> <br/> <br/>
+					
 					We can see we have a site_backups share that is accessible. So I copied it over to kali to check it out. <br/> <br/>
+					
+					<img src="images/nfs.png" alt="nfs" class="inline"/> <br/> <br/> <br/>
 					
 					
 					
