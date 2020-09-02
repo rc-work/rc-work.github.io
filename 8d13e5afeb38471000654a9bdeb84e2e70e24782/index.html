@@ -89,7 +89,7 @@
 			
 					We can see here that powerup discovers a vulnerable service, UsoSvc. Conveniently, empire has a couple service modules to exploit this for us. <br/>
 					I ended up using the powershell/privesc/powerup/service_stager module. We already know from powerup that we can exploit UsoSrv. We can take a quick <br/>
-					peek at the required settings for the service_stager module to see what we need - <br/>		
+					peek at the required settings for the service_stager module to see what we need - <br/>	 <br/>	
 					
 					<img src="images/empire-setting-up-1.PNG" alt="empire" class="inline"/><br/> <br/>
 			
@@ -101,7 +101,7 @@
 							3. Run the service_stager module on our 1st agent, and set it to connect to our new listener. <br/> <br/>
 			
 					In theory this should overwrite the UsoSrv service binary with our new stager, and then make a connection to our new listener, which will feed it the rest of the payload <br/> 
-					hopefully resulting in a SYSTEM/NT AUTHORITY shell so we can grab our root.txt flag. <br/> <br/> <br/>
+					hopefully resulting in a SYSTEM/NT AUTHORITY shell. <br/> <br/> <br/>
 			
 					Step 1 - setting up our new listener <br/>
 					<img src="images/empire-2nd-list.PNG" alt="empire" class="inline"/><br/> <br/>
