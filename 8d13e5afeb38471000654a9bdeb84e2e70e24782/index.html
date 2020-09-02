@@ -88,9 +88,14 @@
 					<img src="images/power-up.PNG" alt="empire powerup" class="inline"/><br/> <br/>
 			
 					We can see here that powerup discovers a vulnerable service, UsoSvc. Conveniently, empire has a couple service modules to exploit this for us. <br/>
-					I ended up using the powershell/privesc/powerup/service_stager module. Since we already know from powerup that we can exploit UsoSrv, our steps from <br/>
-					here should be straightforward. <br/>		
+					I ended up using the powershell/privesc/powerup/service_stager module. We already know from powerup that we can exploit UsoSrv. We can take a quick <br/>
+					peek at the required settings for the service_stager module to see what we need - <br/>		
 					
+					<img src="images/empire-setting-up-1.PNG" alt="empire" class="inline"/><br/> <br/>
+			
+					3 things we need to make it work, the agent to run it on, the service name (UsoSrv), and the listener. We will also setup a stager for the new listener.  <br/>
+					Our steps from here should be straightforward: <br/> <br/><br/>
+			
 							1. Generate a 2nd empire listener. <br/> <br/>
 							2. Generate a stager for this listener. <br/> <br/>
 							3. Run the service_stager module on our 1st agent, and set it to connect to our new listener. <br/> <br/>
@@ -99,22 +104,34 @@
 					hopefully resulting in a SYSTEM/NT AUTHORITY shell so we can grab our root.txt flag. <br/> <br/> <br/>
 			
 					Step 1 - setting up our new listener <br/>
+					<img src="images/empire-2nd-list.PNG" alt="empire" class="inline"/><br/> <br/>
+			
+					Step 2 - setting up our stager <br/>
+					<img src="images/empire-stager.PNG" alt="empire" class="inline"/><br/> <br/>
+			
+					Step 3 - running the service stager module <br/>
+					<img src="images/empire-success-2.PNG" alt="empire" class="inline"/><br/> <br/>
+			
+					And we are able to immediately see that empire caught a connection on our new listener and generated a SYSTEM/NT AUTHORITY agent.
 					
+					<img src="images/empire-final.PNG" alt="empire" class="inline"/><br/> <br/>
+			
+					All thats left from here is to interact with it and grab our flag :D <br/> <br/>
+				
+					<img src="images/empire-final-2.PNG" alt="empire" class="inline"/><br/> <br/>
+			
+			
+					Empire is an awesome tool. I went ahead and redid this the manual route as well too below -
 			
 			
 			
 			
 			
+					
+					<h2> Manual Privesc</h2>
 			
 			
-			
-			
-			
-			
-			
-			
-					Spent a couple hours here trying to get empire service modules to work, but was ultimately unsuccessful. Eventually just moved onto the manual route. <br/>
-					Spawned a manual shell with our previous exploit (just used a powershell rev shell instead of the empire agent) and dropped powerup.ps1 onto the box  <br/>
+					After spawning a manual shell with our previous exploit (just used a powershell rev shell instead of the empire agent), I dropping powerup.ps1 onto the box  <br/>
 					to confirm our earlier finding. As expected we get the same result.  <br/> <br/>
 			
 					<img src="images/powerup-manual.PNG" alt="powerup" class="inline"/><br/> <br/>
