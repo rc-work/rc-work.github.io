@@ -60,14 +60,14 @@
 					This should pull our launcher.bat file, make the connection to our empire agent, which feeds it the rest of a fully interactive shell. <br/>
 					We should end up with a fully interactive empire agent if all goes right. <br/> <br/> <br/>
 					
-					Step 1 - generating a powershell launcher, and start up a listener <br/>
+					Step 1 - generating a powershell launcher, and start up a listener <br/><br/>
 					<img src="images/emp-listener.PNG" alt="empire" class="inline"/> <br/> <br/> 
 					<img src="images/empire-launcher.PNG" alt="empire" class="inline"/> <br/> <br/> <br/> 
 					
-					Step 2 and 3 - Dropping the launcher into a file, and starting python web server <br/>
+					Step 2 and 3 - Dropping the launcher into a file, and starting python web server <br/><br/>
 					<img src="images/launcher.PNG" alt="serving the exploit" class="inline"/> <br/> <br/> <br/> 
 					
-					Step 4 - Running the exploit<br/>
+					Step 4 - Running the exploit<br/><br/>
 					<img src="images/exp-cli.PNG" alt="running the exploit" class="inline"/><br/> <br/> <br/>  
 					
 					
@@ -103,13 +103,13 @@
 					In theory this should overwrite the UsoSrv service binary with our new stager, and then make a connection to our new listener, which will feed it the rest of the payload <br/> 
 					hopefully resulting in a SYSTEM/NT AUTHORITY shell. <br/> <br/> <br/>
 			
-					Step 1 - setting up our new listener <br/>
+					Step 1 - setting up our new listener <br/><br/>
 					<img src="images/empire-2nd-list.PNG" alt="empire" class="inline"/><br/> <br/>
 			
-					Step 2 - setting up our stager <br/>
+					Step 2 - setting up our stager <br/><br/>
 					<img src="images/empire-stager.PNG" alt="empire" class="inline"/><br/> <br/>
 			
-					Step 3 - running the service stager module <br/>
+					Step 3 - running the service stager module <br/><br/>
 					<img src="images/empire-success-2.PNG" alt="empire" class="inline"/><br/> <br/>
 			
 					And we are able to immediately see that empire caught a connection on our new listener and generated a SYSTEM/NT AUTHORITY agent.
@@ -121,7 +121,7 @@
 					<img src="images/empire-final-2.PNG" alt="empire" class="inline"/><br/> <br/>
 			
 			
-					Empire is an awesome tool. I went ahead and redid this the manual route as well too below -
+					Empire is an awesome tool. I went ahead and redid this the manual route as well too below - <br/> <br/> <br/> <br/>
 			
 			
 			
