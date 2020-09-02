@@ -134,12 +134,12 @@
 					<h2> Manual Privesc</h2>
 			
 			
-					After spawning a manual shell with our previous exploit (just used a powershell rev shell instead of the empire agent), I dropping powerup onto the box  <br/>
+					After spawning a manual shell with our previous exploit (just used a powershell rev shell instead of the empire agent), I dropped powerup onto the box  <br/>
 					to confirm our earlier finding. As expected we get the same result.  <br/> <br/>
 			
 					<img src="images/powerup-manual.PNG" alt="powerup" class="inline"/><br/> <br/>
 			
-					So out steps from here are to overwrite the binary for UsoSvc, start up our listener in kali, and then restart the UsoSvc and we should catch a system shell. <br/>
+					Our steps from here are to overwrite the binary for UsoSvc, start up our listener in kali, and then restart the UsoSvc and we should catch a system shell. <br/>
 					I dropped the windows nc.exe on the box in c:\windows\temp so we can easily send ourselves a shell, and then overwrote the binary path. <br/> <br/>
 																    
 					<img src="images/sc-overwrite-binpath.PNG" alt="binpath overwrite" class="inline"/><br/> <br/>
