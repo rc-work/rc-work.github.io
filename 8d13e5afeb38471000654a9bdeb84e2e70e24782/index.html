@@ -80,10 +80,35 @@
 					We can now grab the user.txt flag like so - <br/>
 					<img src="images/user-flag.PNG" alt="user flag" class="inline"/><br/> <br/> <br/> <br/>
 					
-					Onto system for our root.txt flag now :)
+					Onto system for our root.txt flag now :) <br/> <br/> <br/>
 					
+					<h2>Privesc</h2>
+					Since we already have an empire agent, we might as well run the powerup scripts to see if we can catch any freebies. <br/> <br/>
+			
+					<img src="images/power-up.PNG" alt="empire powerup" class="inline"/><br/> <br/>
+			
+					We can see here that powerup discovers a vulnerable service, UsoSvc. <br/> <br/>
+			
+					Spent a couple hours here trying to get empire service modules to work, but was ultimately unsuccessful. Eventually just moved onto the manual route. <br/>
+					Spawned a manual shell with our previous exploit (just used a powershell rev shell instead of the empire agent) and dropped powerup.ps1 onto the box  <br/>
+					to confirm our earlier finding. As expected we get the same result.  <br/> <br/>
+			
+					<img src="images/powerup-manual.PNG" alt="powerup" class="inline"/><br/> <br/>
+			
+					So out steps from here are to overwrite the binary for UsoSvc, start up our listener in kali, and then restart the UsoSvc and we should catch a system shell. <br/>
+					I dropped the windows nc.exe on the box in c:\windows\temp so we can easily send ourselves a shell, and then overwrote the binary path.
 																    
-					
+					<img src="images/sc-overwrite-binpath.PNG" alt="binpath overwrite" class="inline"/><br/> <br/>
+			
+					Then we start a nc listener and restart the UsoSvc service <br/> <br/>
+			
+					<img src="images/restart.PNG" alt="restarting usoscvc" class="inline"/><br/> <br/>
+			
+					And finally back in our listener we have our system shell. <br/> <br/>
+			
+					<img src="images/fucking-finally.PNG" alt="system shell" class="inline"/><br/> <br/>
+			
+					Thanks for reading! <br/> <br/><br/> <br/><br/> <br/>
 					
 			
 			</p>
