@@ -100,20 +100,20 @@ body {
 			
 					<img src="images/power-up.PNG" alt="empire powerup" class="inline"/><br/> <br/>
 			
-					We can see here that powerup discovers a vulnerable service, UsoSrv. Conveniently, empire has a couple service modules to exploit this for us. <br/>
-					I ended up using the powershell/privesc/powerup/service_stager module. We already know from powerup that we can exploit UsoSrv. We can take a quick <br/>
+					We can see here that powerup discovers a vulnerable service, UsoSvc. Conveniently, empire has a couple service modules to exploit this for us. <br/>
+					I ended up using the powershell/privesc/powerup/service_stager module. We already know from powerup that we can exploit UsoSvc. We can take a quick <br/>
 					peek at the required settings for the service_stager module to see what we need - <br/>	 <br/>	
 					
 					<img src="images/empire-setting-up-1.PNG" alt="empire" class="inline"/><br/> <br/>
 			
-					3 things we need to make it work, the agent to run it on, the service name (UsoSrv), and the listener. We will also setup a stager for the new listener.  <br/>
+					3 things we need to make it work, the agent to run it on, the service name (UsoSvc), and the listener. We will also setup a stager for the new listener.  <br/>
 					Our steps from here should be straightforward <br/> <br/> <br/>
 			
 							1. Generate a 2nd empire listener. <br/> <br/>
 							2. Generate a stager for this listener. <br/> <br/>
 							3. Run the service_stager module on our 1st agent, and set it to connect to our new listener. <br/> <br/>
 			
-					In theory this should overwrite the UsoSrv service binary with our new stager, and then make a connection to our new listener, which will feed it the rest of the payload <br/> 
+					In theory this should overwrite the UsoSvc service binary with our new stager, and then make a connection to our new listener, which will feed it the rest of the payload <br/> 
 					hopefully resulting in a SYSTEM/NT AUTHORITY shell. <br/> <br/> <br/>
 			
 					Step 1 - setting up our new listener <br/><br/>
