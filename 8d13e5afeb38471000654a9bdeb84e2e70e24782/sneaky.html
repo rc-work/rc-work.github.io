@@ -97,18 +97,18 @@ body {
 				<img src="images/sneaky/ftp.PNG" alt="uploading rev shell over ftp" class="inline"/> 						<br/> <br/> <br/>
 					
 				And after visiting the page in our browser we receive a connection back to our netcat 						<br/> <br/>
-				<img src="images/sneaky/low-priv.PNG" alt="foothold" class="inline"/> 								<br/> <br/> <br/>
+				<img src="images/sneaky/low-priv.PNG" alt="foothold" class="inline"/> 								<br/> <br/> <br/> <br/>
 					
-				We are dropped in a user shell as www-data, and can use our earlier creds to change over to the developer user.			<br/>
-				We are still unable to pull the user flag, as it is located in user low's directory.						<br/> <br/>
+				We are dropped in a user shell as www-data. We can su over to the developer user as well, but we are still unable to 		<br/>
+				pull the user flag, as it is located in user low's directory.									<br/> <br/>
 					
-				The standard linenum script pulls out some creds from an open .htpasswd file for <b> pypi.sneakycorp.htb </b> 			<br/><br/>
+				I started out by running the standard linenum script. It pulls out some creds from an open .htpasswd file for <b> pypi.sneakycorp.htb </b> 			<br/><br/>
 				<img src="images/sneaky/pypi-creds.PNG" alt=".htpasswd creds" class="inline"/> 							<br/> <br/> <br/>
 				
 				Some further enumeration revealed this to be the port 8080 application that we were previously unable to see. 			<br/> <br/>
 				<img src="images/sneaky/pypi-home-page.PNG" alt="port 8080 web app" class="inline"/> 						<br/> <br/> <br/>
 					
-				Remembering back to our 2nd email we discovered in pauls sent folder, every package in here is executed by the low user. 	<br/>
+				Remembering back to our 2nd email we discovered in pauls sent folder, <b>every package in here is executed by the low user</b>. <br/>
 				So our gameplan from here is to figure out how to upload a malaicious package that low will then execute for us.		<br/>
 				First step is to crack the hash from .htpasswd. We can determine the generic hash type from hash-identifier 			<br/> <br/>
 				<img src="images/sneaky/pypi-creds2.PNG" alt="pypi" class="inline"/> 								<br/> <br/> <br/>
