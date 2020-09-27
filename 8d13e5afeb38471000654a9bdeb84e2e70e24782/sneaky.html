@@ -67,8 +67,8 @@ body {
 				apt-get install evolution
 				</code> 															<br/><br/><br/>
 					
-				After installing I configured the client with pauls email and pointed it at sneakcorp.htb, we are able to see 2 		<br/>
-				emails in pauls sent folder. The first is a set of credentials for the developer user 						<br/><br/>
+				After installing evolution and setting it up with pauls creds, we are able to see 2 emails in pauls sent folder. 		<br/>
+				The first is a set of credentials for the developer user 									<br/><br/>
 				<img src="images/sneaky/smtp-creds.PNG" alt="pauls emails" class="inline"/> 							<br/><br/><br/>
 					
 				And the 2nd gives us a piece of information, telling us that all of the packages in pypi are ran and tested by 			<br/>
@@ -87,9 +87,9 @@ body {
 				Password: 	m^AsY7vTKVT+dV1{WOU%@NaHkUAId3]C	<br/><br/>
 				</code>							<br/><br/><br/>
 					
-				Now with our handy developer creds, we are able to log into the ftp server. There is a /dev/ directory which we have access to, that looks like <br/>
-				the same directory that is served on dev.sneakycorp.htb. So in theory we should be able to drop a reverse shell in there, then access it on the <br/>
-				webserver in order to send a reverse connection back to our machine. <br/><br/><br/>
+				Now with developer creds, we are able to log into the ftp server. There is a /dev/ directory which we have access to,		<br/>
+				that looks like the same directory that is served on <b> dev.sneakycorp.htb </b>. So in theory we should be able to drop 	<br/>
+				a reverse shell in there, then trigger it on the webserver in order to send a reverse connection back to our machine. 		<br/><br/><br/>
 					
 				I opted to use the php reverse shell from pentest monkey - <a href="http://pentestmonkey.net/tools/web-shells/php-reverse-shell">which you can checkout here</a> <br/> <br/>
 					
