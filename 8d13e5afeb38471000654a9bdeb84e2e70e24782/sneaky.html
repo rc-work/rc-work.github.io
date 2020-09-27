@@ -163,7 +163,7 @@ body {
 				The whole point of doing this was to pivot to the low user, and he should be executing these packages according to the email 	<br/>
 				we read earlier. So what is going on?												<br/><br/><br/>
 					
-				<b>when we upload a package our setup.py code is actually ran twice</b>. It is ran the first time by us executing the upload		<br/>
+				<b>When we upload a package our setup.py code is actually ran twice</b>. It is ran the first time by us executing the upload		<br/>
 				on sneakymailer as the developer user. Then it is ran a 2nd time when the low user grabs and executes it. Our nc one liner is		<br/>
 				getting executed by the dev user first, and then we arent able to see the connection attempt from low. We can do a simple os.getuid() 	<br/>
 				check in the setup.py script to see if we are executing as dev or low, if we match low's UID run nc, otherwise do nothing. 		<br/><br/>
