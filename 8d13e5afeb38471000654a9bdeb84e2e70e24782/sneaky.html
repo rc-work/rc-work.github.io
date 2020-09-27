@@ -29,8 +29,19 @@ body {
 				<img src="images/sneaky/nmap.PNG" alt="nmap" class="inline"/> <br/> <br/> <br/>
 					
 				Initially we can see we have a couple web servers and an email server. I went to checkout the web server on port 80 and discovered a list of emails.
-				<img src="images/sneaky/sneaky-corp-honme-page.PNG" alt="emails" class="inline"/> <br/> <br/> <br/>
+				<img src="images/sneaky/sneaky-corp-home-page.PNG" alt="emails" class="inline"/> <br/> <br/> <br/>
 					
+				I tried to run gobuster to see if we could pull out any juicy directories, but ended up pulling out an additional domain. <br/> <br/>
+				<img src="images/sneaky/gob1.PNG" alt="emails" class="inline"/> <br/> <br/> <br/>
+				<img src="images/sneaky/gob2" alt="emails" class="inline"/> <br/> <br/> <br/>
+					
+				Although it appeared to have the same info as the normal domain. I checked out the app on port 8080 as well. <br/> <br/>
+				<img src="images/sneaky/8080-app.PNG" alt="web app on port 8080" class="inline"/> <br/> <br/> <br/>
+					
+				The FTP server appeared to be a dead end since at this point as we don't have any creds and there is no guest access. Judging by the name of the box and the fact
+				that we have an email list, I started thinking we have to phish a user.
+					
+				
 				
 					
 				
