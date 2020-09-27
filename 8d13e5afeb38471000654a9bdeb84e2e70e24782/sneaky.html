@@ -95,9 +95,8 @@ body {
 				And after visiting the page in our browser we receive a connection back to our netcat <br/> <br/>
 				<img src="images/sneaky/low-priv.PNG" alt="foothold" class="inline"/> <br/> <br/> <br/>
 					
-				We are dropped in a user shell as www-data, and can also use our earlier creds to change over to the developer user.		<br/>
-				We are still unable to pull the user flag, as it is located in user low's directory. From here we will need to pivot 		<br/>
-				to user low. 															<br/> <br/>
+				We are dropped in a user shell as www-data, and can use our earlier creds to change over to the developer user.		<br/>
+				We are still unable to pull the user flag, as it is located in user low's directory.					<br/> <br/>
 					
 				The standard linenum script pulls out some creds from an open .htpasswd file for <b> pypi.sneakycorp.htb </b> 			<br/><br/>
 				<img src="images/sneaky/pypi-creds.PNG" alt=".htpasswd creds" class="inline"/> 							<br/> <br/> <br/>
