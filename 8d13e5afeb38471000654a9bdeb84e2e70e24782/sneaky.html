@@ -40,7 +40,7 @@ body {
 				webapp on port 8080 next. 													<br/> <br/>
 				<img src="images/sneaky/8080-app.PNG" alt="web app on port 8080" class="inline"/> 						<br/> <br/> <br/>
 				
-				Not much to see there so I moved onto the ftp server. FTP appeared to be a dead end since at this point as we don't have 	<br/>
+				Not much to see there so I moved onto the FTP server. FTP appeared to be a dead end since at this point as we don't have 	<br/>
 				any creds and there is no guest access. With nothing but a list of emails and the box being named "sneakymailer", I figured	<br/>
 				a phishing attempt could be worth a shot. Maybe there is a program setup to click on every link for a couple users. 		<br/> <br/>
 
@@ -90,28 +90,27 @@ body {
 				Password: 	m^AsY7vTKVT+dV1{WOU%@NaHkUAId3]C	<br/><br/>
 				</code>							<br/><br/><br/>
 					
-				With developer creds, now we are able to log into the ftp server. There is a /dev/ directory which we have access to,		<br/>
-				that looks like the same directory that is served on <b> dev.sneakycorp.htb </b>. So in theory we should be able to drop 	<br/>
-				a reverse shell in there, then trigger it on the webserver in order to send a reverse connection back to our machine. 		<br/><br/><br/>
+				With developer creds, now we are able to log into the FTP server. There is a /dev/ directory which we have access to,		<br/>
+				that looks like the same directory that is served on <b> dev.sneakycorp.htb </b>. in theory we should be able to drop 		<br/>
+				a reverse shell in /dev/, and request that page in our browser to trigger the reverse connection back to our machine. 		<br/><br/><br/>
 					
 				I opted to use the php reverse shell from pentest monkey - <a href="http://pentestmonkey.net/tools/web-shells/php-reverse-shell">which you can checkout here</a> <br/> <br/>
 					
-				After setting up my ip/port info, I uploaded to the ftp server - 								<br/> <br/>
+				Uploading to the FTP server - 													<br/> <br/>
 				<img src="images/sneaky/ftp.PNG" alt="uploading rev shell over ftp" class="inline"/> 						<br/> <br/> <br/>
 					
-				And after visiting the page in our browser we receive a connection back to our netcat 						<br/> <br/>
+				After requesting the page in our browser we receive a connection back to our netcat listener						<br/> <br/>
 				<img src="images/sneaky/low-priv.PNG" alt="foothold" class="inline"/> 								<br/> <br/> <br/> <br/>
 					
-				We are dropped in a user shell as www-data. We can su over to the developer user as well, but we are still unable to 		<br/>
-				pull the user flag, as it is located in user low's directory. I started out by running the standard linenum script. It 		<br/>
-				pulls out some creds from an open .htpasswd file for <b> pypi.sneakycorp.htb </b> 						<br/><br/>
+				We caught a user shell as www-data. We can su over to the developer user, but we are still unable to 			<br/>
+				read user.txt, as it is owned by user low. The standard linenum.sh script found an open .htpasswd file for <b> pypi.sneakycorp.htb </b><br/>
 				<img src="images/sneaky/pypi-creds.PNG" alt=".htpasswd creds" class="inline"/> 							<br/> <br/> <br/>
 				
 				Some further enumeration revealed this to be the port 8080 application that we were previously unable to see. 			<br/> <br/>
 				<img src="images/sneaky/pypi-home-page.PNG" alt="port 8080 web app" class="inline"/> 						<br/> <br/> <br/>
 					
-				Remembering back to our 2nd email we discovered in Paul's sent folder, <b>every package in here is executed by the low user</b>. <br/>
-				So our gameplan from here is to figure out how to upload a malaicious package that low will then execute for us.		<br/>
+				Remembering back to our 2nd email we discovered in Paul's sent folder, <b>every package in here is executed by the low user</b>.<br/>
+				We need to figure out how to upload a malicious package that will then get executed as user low.				<br/> <br/>
 				First step is to crack the hash from .htpasswd. We can determine the generic hash type from hash-identifier 			<br/> <br/>
 				<img src="images/sneaky/pypi-creds2.PNG" alt="pypi" class="inline"/> 								<br/> <br/> <br/>
 																  
@@ -164,7 +163,7 @@ body {
 				<img src="images/sneaky/setup-old.PNG" alt="setup.py" class="inline"/>								<br/><br/><br/>
 					
 					
-				At this point uploading a pypi package with the above two files will result in catching yet another shell as the dev user.	<br/>
+				At this point uploading a pypi package with the above two files results in catching yet another shell as the dev user.		<br/>
 				The whole point of doing this was to pivot to the low user, and he should be executing these packages according to the email 	<br/>
 				we read earlier. So what is going on?												<br/><br/><br/>
 					
