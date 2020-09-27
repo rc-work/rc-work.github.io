@@ -28,7 +28,8 @@ body {
 				We start out with our usual nmap scan -  <br/> <br/>
 				<img src="images/sneaky/nmap.PNG" alt="nmap" class="inline"/> <br/> <br/> <br/>
 					
-				Initially we can see we have a couple web servers and an email server. I went to checkout the web server on port 80 and discovered a list of emails. <br/> <br/>
+				Initially we can see we have a couple web servers and an email server. I went to checkout the web server on port 80 and discovered a list of emails. 
+				<br/> <br/> 
 				<img src="images/sneaky/sneaky-corp-home-page.PNG" alt="emails" class="inline"/> <br/> <br/> <br/>
 					
 				I ran gobuster to see if we could pull out any additional domains or vhosts, and we find dev.sneakcorp.htb. <br/> <br/>
@@ -38,19 +39,20 @@ body {
 				Sadly it appeared to have the same info as the normal domain. I checked out the app on port 8080 next. <br/> <br/>
 				<img src="images/sneaky/8080-app.PNG" alt="web app on port 8080" class="inline"/> <br/> <br/> <br/>
 					
-				The FTP server appeared to be a dead end since at this point as we don't have any creds and there is no guest access. Judging by the name of the box and the fact
-				that we have an email list, I started thinking we have to phish a user. <br/> <br/>
+				The FTP server appeared to be a dead end since at this point as we don't have any creds and there is no guest access. 
+				Judging by the name of the box and the fact that we have an email list, I started thinking we have to phish a user. <br/> <br/>
 					
-				I opted to use a tool called swaks - which you can checkout <a href="https://github.com/jetmore/swaks">here</a> <br/> <br/>
+				I opted to use a tool called swaks - <a href="https://github.com/jetmore/swaks">which you can checkout here</a> <br/> <br/>
 				
 				Our basic idea is just to get one of the users to click on our ip, and should be able to see the connection in nc and judge where to go from there. 
-				I sent out an email to everyone on the list we found earlier, with the simple contents of "Visit MY-IP-GOES-HERE" and opened up a nc window to see what we get. <br/> <br/>
+				I sent out an email to everyone on the list we found earlier, with the simple contents of "Visit MY-IP-GOES-HERE" and opened up a netcat window to see 
+				what we get. <br/> <br/>
 				<img src="images/sneaky/swaks.PNG" alt="swaks" class="inline"/> <br/> <br/> <br/>
 					
 				And sure enough in our netcat window we see an http connection attempt with the users creds.  <br/> <br/>
 				<img src="images/sneaky/phsished.PNG" alt="phished" class="inline"/> <br/> <br/> <br/>	
 					
-				This is not very realistic, as in the real world the users would probably not click the link on such a basic email in the first place, and the users 
+				This is not very realistic, in the real world the users would probably not click the link on an email like this in the first place, and the users 
 				computer wouldnt just autofill their creds on a http request to a brand new ip. Still this was a pretty cool example.
 				
 					
