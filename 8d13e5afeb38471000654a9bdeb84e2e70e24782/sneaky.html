@@ -61,22 +61,22 @@ body {
 				Password:	^(#J@SkFv2[%KhIxKk(Ju`hqcHl<:Ht 	<br/>
 				</code>  <br/><br/><br/>
 				
-				With our new email creds, we should now be able to setup an email client and read through pauls emails. 			<br/>
+				With our new email creds, we should now be able to setup an email client and read through Paul's emails. 			<br/>
 				I setup Evolution, which you can download with a simple  									<br/><br/><br/>
 				
 				<code>
 				apt-get install evolution
 				</code> 															<br/><br/><br/>
 					
-				After installing evolution and setting it up with pauls creds, we are able to see 2 emails in pauls sent folder. 		<br/>
-				The first is a set of credentials for the developer user 									<br/><br/>
-				<img src="images/sneaky/smtp-creds.PNG" alt="pauls emails" class="inline"/> 							<br/><br/><br/>
+				After installing evolution and setting it up with Paul's creds, we are able to see 2 emails in Paul's sent folder. 		<br/>
+				Email #1 is a set of credentials for the developer user 									<br/><br/>
+				<img src="images/sneaky/smtp-creds.PNG" alt="Paul's emails" class="inline"/> 							<br/><br/><br/>
 					
-				And the 2nd gives us a piece of information, telling us that <b>all of the packages in pypi are ran and tested by 		<br/>
-				the low user</b>. This may come in handy later if we need to pivot to the low user. 						<br/> <br/>
-				<img src="images/sneaky/smtp-info.PNG" alt="pauls emails" class="inline"/> 							<br/> <br/> <br/>
+				Email #2 tells us that <b>all of the packages in pypi are ran and tested by the low user</b>. This may come in 			<br/>
+				handy later if we need to pivot to the low user. 										<br/> <br/>
+				<img src="images/sneaky/smtp-info.PNG" alt="Paul's emails" class="inline"/> 							<br/> <br/> <br/>
 					
-				Our cred list is now - 													
+				Our creds list is now - 													
 					
 				<br/><br/><br/> <code>
 				(smtp)							<br/>
@@ -108,7 +108,7 @@ body {
 				Some further enumeration revealed this to be the port 8080 application that we were previously unable to see. 			<br/> <br/>
 				<img src="images/sneaky/pypi-home-page.PNG" alt="port 8080 web app" class="inline"/> 						<br/> <br/> <br/>
 					
-				Remembering back to our 2nd email we discovered in pauls sent folder, <b>every package in here is executed by the low user</b>. <br/>
+				Remembering back to our 2nd email we discovered in Paul's sent folder, <b>every package in here is executed by the low user</b>. <br/>
 				So our gameplan from here is to figure out how to upload a malaicious package that low will then execute for us.		<br/>
 				First step is to crack the hash from .htpasswd. We can determine the generic hash type from hash-identifier 			<br/> <br/>
 				<img src="images/sneaky/pypi-creds2.PNG" alt="pypi" class="inline"/> 								<br/> <br/> <br/>
