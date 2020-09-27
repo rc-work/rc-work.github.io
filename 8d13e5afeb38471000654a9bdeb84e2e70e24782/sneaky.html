@@ -63,7 +63,7 @@ body {
 				which you can setup with a simple  <br/><br/><br/>
 				<code>
 				apt-get install evolution
-				</code> <br/> <br/>
+				</code> <br/><br/><br/>
 					
 				After installing I configured the client with pauls email and pointed it at sneakcorp.htb, we are able to see 2 emails in pauls sent folder.<br/>
 				The first is a set of credentials for the developer user <br/> <br/>
@@ -73,16 +73,15 @@ body {
 				come in handy  if we need to pivot to the low user. <br/> <br/>
 				<img src="images/sneaky/smtp-info.PNG" alt="pauls emails" class="inline"/> <br/> <br/> <br/>
 					
-				Our cred list is now - <br/><br/><br/>
-				<code>
+				Our cred list is now - 
+					
+				<br/><br/><br/> <code>
 				Username: 	paulbyrd@sneakymailer.htb 		<br/>
 				Password:	^(#J@SkFv2[%KhIxKk(Ju`hqcHl<:Ht		<br/><br/>
 										
 				Username: 	developer				<br/>
 				Password: 	m^AsY7vTKVT+dV1{WOU%@NaHkUAId3]C	<br/>
-				</code>
-				
-				<br/> <br/> <br/>
+				</code><br/><br/><br/>
 					
 				Now with our handy developer creds, we are able to log into the ftp server. There is a /dev/ directory which we have access to, that looks like <br/>
 				the same directory that is served on dev.sneakycorp.htb. So in theory we should be able to drop a reverse shell in there, then access it on the <br/>
@@ -92,6 +91,47 @@ body {
 					
 				And after visiting the page in our browser we receive a connection back to our netcat <br/> <br/>
 				<img src="images/sneaky/low-priv.PNG" alt="foothold" class="inline"/> <br/> <br/> <br/>
+					
+				We are dropped in a user shell as www-data, and can also use our earlier creds to change over to the developer user. We are still unable to pull  <br/>
+				the user flag, as it is located in user low's directory. From here we will need to pivot to user low. <br/> <br/>
+					
+				The standard linenum script pulls out some creds from an open .htpasswd file for the domain pypi.sneakycorp.htb, which we previously hadnt seen. Some <br/>
+				further enumeration revealed this to be the port 8080 application that we were previously unable to see. <br/> <br/>
+				<img src="images/sneaky/pypi-home-page.PNG" alt="port 8080 web app" class="inline"/> <br/> <br/> <br/>
+				<img src="images/sneaky/pypi-creds.PNG" alt=".htpasswd creds" class="inline"/> <br/> <br/> <br/>
+					
+				This appeared to be an application to upload and serve packages locally. Remembering back to our 2nd email we discvoered in pauls sent folder, every <br/>
+				package in here is executed by the low user. So our gameplan from here is to figure out how to upload a malaicious package that low will then execute <br/> 
+				for us.<br/><br/><br/>
+					
+				First step is to crack the hash from .htpasswd. We can determine the generic hash type from hash-identifier <br/> <br/>
+				<img src="images/sneaky/pypi-creds2.PNG" alt="pypi" class="inline"/> <br/> <br/> <br/>
+																  
+				We can then find the actual hash type on the hashcat page, and then attempt to crack it <br/> <br/>
+				<img src="images/sneaky/pypi-creds3.PNG" alt="pypi" class="inline"/> <br/> <br/> <br/
+				<img src="images/sneaky/pypi-creds4.PNG" alt="pypi" class="inline"/> <br/> <br/> <br/
+				
+				Hashcat cracks it, and we can update our creds list to 
+																  
+				Our cred list is now - 
+					
+				<br/><br/><br/> <code>
+				(smtp)							<br/>
+				Username: 	paulbyrd@sneakymailer.htb 		<br/>
+				Password:	^(#J@SkFv2[%KhIxKk(Ju`hqcHl<:Ht		<br/><br/>
+				
+				(user acct)						<br/>
+				Username: 	developer				<br/>
+				Password: 	m^AsY7vTKVT+dV1{WOU%@NaHkUAId3]C	<br/>
+				
+				(pypi creds)						<br/>
+				username: 	pypi					<br/>
+ 				password:	soufianeelhaoui				<br/><br/>
+				</code><br/><br/><br/>
+																  
+				
+				
+				
 				
 				
 					
