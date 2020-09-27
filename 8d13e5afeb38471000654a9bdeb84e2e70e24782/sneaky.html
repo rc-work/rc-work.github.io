@@ -35,34 +35,35 @@ body {
 				<img src="images/sneaky/gob1.PNG" alt="emails" class="inline"/> 								<br/> <br/> <br/>
 				<img src="images/sneaky/gob2.PNG" alt="emails" class="inline"/> 								<br/> <br/> <br/>
 					
-				Sadly <b>dev.sneakycorp.htb</b> appeared to have the same html as the normal domain. I checked out the app on port 8080 next. 	<br/> <br/>
+				Sadly <b>dev.sneakycorp.htb</b> appeared to have the same html as the normal sneakycorp.htb domain. I checked out the 		<br/>
+				webapp on port 8080 next. 													<br/> <br/>
 				<img src="images/sneaky/8080-app.PNG" alt="web app on port 8080" class="inline"/> 						<br/> <br/> <br/>
 				
 				Not much to see there so I moved onto the ftp server. FTP appeared to be a dead end since at this point as we don't have 	<br/>
-				any creds and there is no guest access. Judging by the name of the box and the fact that we have an email list, I started 	<br/>
-				thinking we have to phish a user. 												<br/> <br/>
-					
-				I opted to use a tool called swaks - <a href="https://github.com/jetmore/swaks">which you can checkout here</a> 		<br/> <br/>
+				any creds and there is no guest access. With nothing but a list of emails and the box being named "sneakymailer", I figured	<br/>
+				a phishing attempt could be worth a shot. Maybe there is a program setup to click on every link for a couple users. 		<br/> <br/>
+
 				
-				I figured a good first step would be open a nc listener, throw our IP on an email and blast it out to that entire list.		<br/>
-				Maybe there is a program setup to click on every link for a couple users. In the connection agents in netcat we should be 	<br/>
-				able to see the client browser version and we can form some client side attacks from there if need be. I sent out an email	<br/>
-				to everyone on the list we found on <b>sneakycorp.htb</b>earlier, with the contents "Visit 10.10.10.10". Where 10.10.10.10 	<br/>
-				would be my ip. 														<br/> <br/>
-				<img src="images/sneaky/swaks.PNG" alt="swaks" class="inline"/> 								<br/> <br/> <br/>
 					
-				In our netcat window we see an http connection attempt with the users creds.  							<br/> <br/>
+					
+				I opted to use a tool called swaks - <a href="https://github.com/jetmore/swaks">which you can checkout here</a> 		<br/> <br/>			
+					
+				I sent out an email to everyone on the list we found on <b>sneakycorp.htb</b>earlier, with the contents "Visit 10.10.14.2".	<br/>
+				Where 10.10.14.2 was my ip. 													<br/><br/>
+				<img src="images/sneaky/swaks.PNG" alt="swaks" class="inline"/>									<br/> <br/> <br/>
+					
+					
+				In our netcat window we see an http connection attempt with the user Paul's creds.						<br/> <br/>
 				<img src="images/sneaky/phished.PNG" alt="phished" class="inline"/> 								<br/> <br/> <br/>	
 					
-				After urldecoding the above password, we get 
+				We can see in the "Content-Type" header that the contents are url encoded.After urldecoding the above password, we get 		<br/> <br/>
 				
 				<br/><br/><br/> <code>
 				Username: 	paulbyrd@sneakymailer.htb 		<br/>
 				Password:	^(#J@SkFv2[%KhIxKk(Ju`hqcHl<:Ht 	<br/>
 				</code>  <br/><br/><br/>
 				
-				With our new email creds, we should now be able to setup an email client and read through Paul's emails. 			<br/>
-				I setup Evolution, which you can download with a simple  									<br/><br/><br/>
+				With Paul's creds we can setup an email client and read his emails. I setup Evolution, which you can download with 		<br/>								<br/><br/><br/>
 				
 				<code>
 				apt-get install evolution
