@@ -99,9 +99,9 @@ body {
 				After requesting the page in our browser we receive a connection back to our netcat listener					<br/> <br/>
 				<img src="images/sneaky/low-priv.PNG" alt="foothold" class="inline"/> 								<br/> <br/> <br/> <br/>
 					
-				We caught a user shell as www-data. We can su over to the developer user, but we are still unable to 				<br/>
-				read user.txt, as it is owned by user low. To get a better idea of the system I ran the linenum.sh script. 			<br/>
-				It found an open .htpasswd file for <b> pypi.sneakycorp.htb </b><br/>								<br/><br/>
+				We caught a user shell as www-data. We can su over to the developer user, but we are still unable to read user.txt, as it 	<br/>
+				is owned by user low. To get a better idea of the system I ran the linenum.sh script, which found an open .htpasswd file for 	<br/>
+				<b> pypi.sneakycorp.htb</b>. This was a bit strange as we have not seen this domain yet. 					<br/> <br/>								
 				<img src="images/sneaky/pypi-creds.PNG" alt=".htpasswd creds" class="inline"/> 							<br/> <br/> <br/>
 				
 				Some further enumeration revealed this to be the port 8080 application that we were previously unable to see. 			<br/> <br/>
