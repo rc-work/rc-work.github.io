@@ -83,6 +83,15 @@ body {
 				</code>
 				
 				<br/> <br/> <br/>
+					
+				Now with our handy developer creds, we are able to log into the ftp server. There is a /dev/ directory which we have access to, that looks like <br/>
+				the same directory that is served on dev.sneakycorp.htb. So in theory we should be able to drop a reverse shell in there, then access it on the <br/>
+				webserver in order to send a reverse connection back to our machine. <br/><br/><br/>
+					
+				<img src="images/sneaky/ftp.PNG" alt="uploading rev shell over ftp" class="inline"/> <br/> <br/> <br/>
+					
+				And after visiting the page in our browser we receive a connection back to our netcat
+				<img src="images/sneaky/low-priv.PNG" alt="foothold" class="inline"/> <br/> <br/> <br/>
 				
 				
 					
