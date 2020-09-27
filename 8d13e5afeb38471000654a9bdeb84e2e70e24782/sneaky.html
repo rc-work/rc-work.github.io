@@ -95,28 +95,26 @@ body {
 				And after visiting the page in our browser we receive a connection back to our netcat <br/> <br/>
 				<img src="images/sneaky/low-priv.PNG" alt="foothold" class="inline"/> <br/> <br/> <br/>
 					
-				We are dropped in a user shell as www-data, and can also use our earlier creds to change over to the developer user. We are still unable to pull  <br/>
-				the user flag, as it is located in user low's directory. From here we will need to pivot to user low. <br/> <br/>
+				We are dropped in a user shell as www-data, and can also use our earlier creds to change over to the developer user.		<br/>
+				We are still unable to pull the user flag, as it is located in user low's directory. From here we will need to pivot 		<br/>
+				to user low. 															<br/> <br/>
 					
-				The standard linenum script pulls out some creds from an open .htpasswd file for <b> pypi.sneakycorp.htb </b> <br/><br/>
+				The standard linenum script pulls out some creds from an open .htpasswd file for <b> pypi.sneakycorp.htb </b> 			<br/><br/>
+				<img src="images/sneaky/pypi-creds.PNG" alt=".htpasswd creds" class="inline"/> 							<br/> <br/> <br/>
 				
-				<img src="images/sneaky/pypi-creds.PNG" alt=".htpasswd creds" class="inline"/> <br/> <br/> <br/>
-				
-				Some further enumeration revealed this to be the port 8080 application that we were previously unable to see. <br/> <br/>
-				<img src="images/sneaky/pypi-home-page.PNG" alt="port 8080 web app" class="inline"/> <br/> <br/> <br/>
+				Some further enumeration revealed this to be the port 8080 application that we were previously unable to see. 			<br/> <br/>
+				<img src="images/sneaky/pypi-home-page.PNG" alt="port 8080 web app" class="inline"/> 						<br/> <br/> <br/>
 					
-				Remembering back to our 2nd email we discovered in pauls sent folder, every package in here is executed by the low user. <br/>
-				So our gameplan from here is to figure out how to upload a malaicious package that low will then execute for us.<br/><br/><br/>
-				for us.<br/><br/><br/>
-					
-				First step is to crack the hash from .htpasswd. We can determine the generic hash type from hash-identifier <br/> <br/>
-				<img src="images/sneaky/pypi-creds2.PNG" alt="pypi" class="inline"/> <br/> <br/> <br/>
+				Remembering back to our 2nd email we discovered in pauls sent folder, every package in here is executed by the low user. 	<br/>
+				So our gameplan from here is to figure out how to upload a malaicious package that low will then execute for us.		<br/>
+				First step is to crack the hash from .htpasswd. We can determine the generic hash type from hash-identifier 			<br/> <br/>
+				<img src="images/sneaky/pypi-creds2.PNG" alt="pypi" class="inline"/> 								<br/> <br/> <br/>
 																  
-				We can then find the actual hash type on the hashcat page, and then attempt to crack it <br/> <br/>
-				<img src="images/sneaky/pypi-creds3.PNG" alt="pypi" class="inline"/> <br/> <br/> <br/>
-				<img src="images/sneaky/pypi-creds4.PNG" alt="pypi" class="inline"/> <br/> <br/> <br/>
+				We can then find the actual hash type on the hashcat page, and then attempt to crack it 					<br/> <br/>
+				<img src="images/sneaky/pypi-creds3.PNG" alt="pypi" class="inline"/> 								<br/> <br/> <br/>
+				<img src="images/sneaky/pypi-creds4.PNG" alt="pypi" class="inline"/> 								<br/> <br/> <br/>
 				
-				Hashcat cracks it, and we can update our creds list  <br/> <br/
+				Hashcat cracks it, and we can update our creds list  										<br/> <br/
 					
 				<br/><br/><br/> <code>
 				(smtp)							<br/>
