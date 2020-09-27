@@ -31,11 +31,11 @@ body {
 				Initially we can see we have a couple web servers and an email server. I went to checkout the web server on port 80 and discovered a list of emails. <br/> <br/>
 				<img src="images/sneaky/sneaky-corp-home-page.PNG" alt="emails" class="inline"/> <br/> <br/> <br/>
 					
-				I tried to run gobuster to see if we could pull out any juicy directories, but ended up pulling out an additional domain. <br/> <br/>
+				I ran gobuster to see if we could pull out any additional domains or vhosts, and we find dev.sneakcorp.htb. <br/> <br/>
 				<img src="images/sneaky/gob1.PNG" alt="emails" class="inline"/> <br/> <br/> <br/>
 				<img src="images/sneaky/gob2.PNG" alt="emails" class="inline"/> <br/> <br/> <br/>
 					
-				Although it appeared to have the same info as the normal domain. I checked out the app on port 8080 as well. <br/> <br/>
+				Sadly it appeared to have the same info as the normal domain. I checked out the app on port 8080 next. <br/> <br/>
 				<img src="images/sneaky/8080-app.PNG" alt="web app on port 8080" class="inline"/> <br/> <br/> <br/>
 					
 				The FTP server appeared to be a dead end since at this point as we don't have any creds and there is no guest access. Judging by the name of the box and the fact
@@ -44,10 +44,10 @@ body {
 				I opted to use a tool called swaks - which you can checkout <a href="https://github.com/jetmore/swaks">here</a> <br/> <br/>
 				
 				Our basic idea is just to get one of the users to click on our ip, and should be able to see the connection in nc and judge where to go from there. 
-				I sent out an email to everyone on the list we found earlier, with the simple contents of "Visit <my-ip>" and opened up a nc window to see what we get.
+				I sent out an email to everyone on the list we found earlier, with the simple contents of "Visit <my-ip>" and opened up a nc window to see what we get. <br/> <br/>
 				<img src="images/sneaky/swaks.PNG" alt="swaks" class="inline"/> <br/> <br/> <br/>
 					
-				And sure enough in our netcat window we see an http connection attempt with the users creds. 
+				And sure enough in our netcat window we see an http connection attempt with the users creds.  <br/> <br/>
 				<img src="images/sneaky/phsished.PNG" alt="phished" class="inline"/> <br/> <br/> <br/>	
 					
 				This is not very realistic, as in the real world the users would probably not click the link on such a basic email in the first place, and the users 
