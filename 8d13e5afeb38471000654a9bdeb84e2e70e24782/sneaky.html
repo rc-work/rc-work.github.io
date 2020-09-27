@@ -38,16 +38,16 @@ body {
 					
 				Sadly it appeared to have the same info as the normal domain. I checked out the app on port 8080 next. 				<br/> <br/>
 				<img src="images/sneaky/8080-app.PNG" alt="web app on port 8080" class="inline"/> 						<br/> <br/> <br/>
-					
-				The FTP server appeared to be a dead end since at this point as we don't have any creds and there is no guest access. 		<br/>
-				Judging by the name of the box and the fact that we have an email list, I started thinking we have to phish a user. 		<br/> <br/>
+				
+				Not much to see there so I moved onto the ftp server. FTP appeared to be a dead end since at this point as we don't have 	<br/>
+				any creds and there is no guest access. Judging by the name of the box and the fact that we have an email list, I started 	<br/>
+				thinking we have to phish a user. 												<br/> <br/>
 					
 				I opted to use a tool called swaks - <a href="https://github.com/jetmore/swaks">which you can checkout here</a> 		<br/> <br/>
 				
-				Our basic idea is just to get one of the users to click on our ip, and should be able to see the connection 			<br/>
-				in nc and judge where to go from there. I sent out an email to everyone on the list we found earlier, with the 			<br/>
-				simple contents of "Visit 8.8.8.8" where 8.8.8.8 would be my ip. I then opened up a netcat window to see what 			<br/>
-				we got. 															<br/> <br/>
+				Our basic idea is just to get one of the users to click on our ip, and we should be able to see the connection 			<br/>
+				in netcat and judge where to go from there. I sent out an email to everyone on the list we found earlier, with the 		<br/>
+				simple contents of "Visit 8.8.8.8" where 8.8.8.8 would be my ip. 								<br/> <br/>
 				<img src="images/sneaky/swaks.PNG" alt="swaks" class="inline"/> 								<br/> <br/> <br/>
 					
 				In our netcat window we see an http connection attempt with the users creds.  							<br/> <br/>
@@ -61,7 +61,7 @@ body {
 				</code>  <br/><br/><br/>
 				
 				With our new email creds, we should now be able to setup an email client and read through pauls emails. 			<br/>
-				I opted to setup Evolution, which you can setup with a simple  									<br/><br/><br/>
+				I setup Evolution, which you can download with a simple  									<br/><br/><br/>
 				
 				<code>
 				apt-get install evolution
