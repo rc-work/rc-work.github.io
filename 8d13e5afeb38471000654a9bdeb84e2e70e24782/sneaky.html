@@ -28,12 +28,10 @@ body {
 				We start out with our usual nmap scan -  											<br/> <br/>
 				<img src="images/sneaky/nmap.PNG" alt="nmap" class="inline"/>									<br/> <br/> <br/>
 					
-				Initially we can see we have a couple web servers and an email server. I went to checkout the web server 			<br/> 
-				on port 80 and discovered a list of emails. 											<br/> <br/> 
+				Initially we can see we have a couple web servers and an email server. The web server on port 80 has a list of emails. 		<br/>									<br/> <br/> 
 				<img src="images/sneaky/sneaky-corp-home-page.PNG" alt="emails" class="inline"/> 						<br/> <br/> <br/>
 					
-				I saved these emails into a list and then continued on enumerating. I ran gobuster to pull out any additional domains or 	<br/>
-				vhosts, and we find a couple standard directories as well as <b> dev.sneakycorp.htb </b>					<br/> <br/>
+				I ran gobuster and we see a couple standard directories as well as <b> dev.sneakycorp.htb </b>					<br/> <br/>
 				<img src="images/sneaky/gob1.PNG" alt="emails" class="inline"/> 								<br/> <br/> <br/>
 				<img src="images/sneaky/gob2.PNG" alt="emails" class="inline"/> 								<br/> <br/> <br/>
 					
@@ -46,9 +44,11 @@ body {
 					
 				I opted to use a tool called swaks - <a href="https://github.com/jetmore/swaks">which you can checkout here</a> 		<br/> <br/>
 				
-				Our basic idea is just to get one of the users to click on our ip, and we should be able to see the connection 			<br/>
-				in netcat and judge where to go from there. I sent out an email to everyone on the list we found earlier, with the 		<br/>
-				simple contents of "Visit 8.8.8.8" where 8.8.8.8 would be my ip. 								<br/> <br/>
+				I figured a good first step would be open a nc listener, throw our IP on an email and blast it out to that entire list.		<br/>
+				Maybe there is a program setup to click on every link for a couple users. In the connection agents in netcat we should be 	<br/>
+				able to see the client browser version and we can form some client side attacks from there if need be. I sent out an email	<br/>
+				to everyone on the list we found on <b>sneakycorp.htb</b>earlier, with the contents "Visit 10.10.10.10". Where 10.10.10.10 	<br/>
+				would be my ip. 														<br/> <br/>
 				<img src="images/sneaky/swaks.PNG" alt="swaks" class="inline"/> 								<br/> <br/> <br/>
 					
 				In our netcat window we see an http connection attempt with the users creds.  							<br/> <br/>
