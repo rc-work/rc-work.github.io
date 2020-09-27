@@ -58,9 +58,34 @@ body {
 				Username: 	paulbyrd@sneakymailer.htb
 				Password:	^(#J@SkFv2[%KhIxKk(Ju`hqcHl<:Ht
 				</xmp>
-					
+				
 				This is not very realistic, in the real world the users would probably not click the link on an email like this in the first place, and the users <br/>
-				computer wouldnt just autofill their creds on a http request to a brand new ip. Still this was a pretty cool example.
+				computer wouldnt just autofill their creds on a http request to a brand new ip. Still this was a pretty cool example. <br/> <br/>
+				
+				However with our new email creds, we should now be able to setup an email client and read through pauls emails. I opted to setup Evolution,
+				which you can setup with a simple  <br/>
+				<xmp>
+				apt-get install evolution
+				</xmp> <br/> <br/>
+					
+				After installing I configured the client and pointed it at sneakcorp.htb, we are able to see 2 emails in pauls sent folder.<br/>
+				The first is a set of credentials for the developer user <br/> <br/>
+				<img src="images/sneaky/smtp-creds.PNG" alt="pauls emails" class="inline"/> <br/> <br/> <br/>
+					
+				And the 2nd gives us a piece of information, telling us that all of the packages in pypi are ran and tested by the low user. This may <br/>
+				come in handy  if we need to pivot to the low user. <br/> <br/>
+				<img src="images/sneaky/smtp-info.PNG" alt="pauls emails" class="inline"/> <br/> <br/> <br/>
+					
+				Our updated cred list is now -
+				<xmp>
+				Username: 	paulbyrd@sneakymailer.htb
+				Password:	^(#J@SkFv2[%KhIxKk(Ju`hqcHl<:Ht
+										
+				Username: 	developer
+				Password: 	m^AsY7vTKVT+dV1{WOU%@NaHkUAId3]C
+				</xmp>
+					
+				
 				
 					
 				
