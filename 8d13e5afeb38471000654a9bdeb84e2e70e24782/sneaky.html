@@ -89,14 +89,14 @@ body {
 					
 				I opted to use the php reverse shell from pentest monkey - <a href="http://pentestmonkey.net/tools/web-shells/php-reverse-shell">which you can checkout here</a> <br/> <br/>
 					
-				After setting up my ip/port info, I uploaded to the ftp server - <br/> <br/>
-				<img src="images/sneaky/ftp.PNG" alt="uploading rev shell over ftp" class="inline"/> <br/> <br/> <br/>
+				After setting up my ip/port info, I uploaded to the ftp server - 								<br/> <br/>
+				<img src="images/sneaky/ftp.PNG" alt="uploading rev shell over ftp" class="inline"/> 						<br/> <br/> <br/>
 					
-				And after visiting the page in our browser we receive a connection back to our netcat <br/> <br/>
-				<img src="images/sneaky/low-priv.PNG" alt="foothold" class="inline"/> <br/> <br/> <br/>
+				And after visiting the page in our browser we receive a connection back to our netcat 						<br/> <br/>
+				<img src="images/sneaky/low-priv.PNG" alt="foothold" class="inline"/> 								<br/> <br/> <br/>
 					
-				We are dropped in a user shell as www-data, and can use our earlier creds to change over to the developer user.		<br/>
-				We are still unable to pull the user flag, as it is located in user low's directory.					<br/> <br/>
+				We are dropped in a user shell as www-data, and can use our earlier creds to change over to the developer user.			<br/>
+				We are still unable to pull the user flag, as it is located in user low's directory.						<br/> <br/>
 					
 				The standard linenum script pulls out some creds from an open .htpasswd file for <b> pypi.sneakycorp.htb </b> 			<br/><br/>
 				<img src="images/sneaky/pypi-creds.PNG" alt=".htpasswd creds" class="inline"/> 							<br/> <br/> <br/>
@@ -122,16 +122,28 @@ body {
 				
 				(user acct)						<br/>
 				Username: 	developer				<br/>
-				Password: 	m^AsY7vTKVT+dV1{WOU%@NaHkUAId3]C	<br/>
+				Password: 	m^AsY7vTKVT+dV1{WOU%@NaHkUAId3]C	<br/><br/>
 				
 				(pypi creds)						<br/>
 				username: 	pypi					<br/>
  				password:	soufianeelhaoui				<br/><br/>
 				</code><br/><br/><br/>
 																  
+				With our newfound pypi creds in hand, we turn to the pypi documentation to figure out how to upload a package. 			<br/>
+				There are 2 files we need to setup. Firstly, we need a .pypirc file, which tells the system where to get the packages		<br/>
+				from and what creds to use. Secondly, we need a setup.py file which details what actions to perform to install it.		<br/><br/>
+					
+				From the pypi documentation, the .pypirc file											<br/><br/>
+				<img src="images/sneaky/pypi-setup1.PNG" alt="pypi docs" class="inline"/>								<br/><br/><br/>
 				
-				
-				
+				The setup.py file														<br/><br/>
+				<img src="images/sneaky/pypi-setup2.PNG" alt="pypi docs" class="inline"/>								<br/><br/><br/>
+					
+				The basic idea is that we build these on our host kali system, and then transfer them over to sneakymailer. We then		<br/>
+				run the setup.py file which will contain our malicious code. I set these up on my system like so				<br/<br/
+					
+				<img src="images/sneaky/setup-py.PNG" alt="setup.py" class="inline"/>								<br/><br/><br/>
+				<img src="images/sneaky/pypirc.PNG" alt="pypirc" class="inline"/>								<br/><br/><br/>
 				
 				
 					
