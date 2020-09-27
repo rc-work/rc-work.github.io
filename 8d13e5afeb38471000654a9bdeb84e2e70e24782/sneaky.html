@@ -49,7 +49,7 @@ body {
 				up a netcat window to see what we get. <br/> <br/>
 				<img src="images/sneaky/swaks.PNG" alt="swaks" class="inline"/> <br/> <br/> <br/>
 					
-				And sure enough in our netcat window we see an http connection attempt with the users creds.  <br/> <br/>
+				In our netcat window we see an http connection attempt with the users creds.  <br/> <br/>
 				<img src="images/sneaky/phished.PNG" alt="phished" class="inline"/> <br/> <br/> <br/>	
 					
 				After urldecoding the above password, we get <br/> <br/><br/>
@@ -95,7 +95,7 @@ body {
 				We are dropped in a user shell as www-data, and can also use our earlier creds to change over to the developer user. We are still unable to pull  <br/>
 				the user flag, as it is located in user low's directory. From here we will need to pivot to user low. <br/> <br/>
 					
-				The standard linenum script pulls out some creds from an open .htpasswd file for <b> pypi.sneakycorp.htb </b>, which we previously hadnt seen <br/>
+				The standard linenum script pulls out some creds from an open .htpasswd file for <b> pypi.sneakycorp.htb </b> <br/><br/>
 				
 				<img src="images/sneaky/pypi-creds.PNG" alt=".htpasswd creds" class="inline"/> <br/> <br/> <br/>
 				
