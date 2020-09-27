@@ -100,9 +100,8 @@ body {
 				<img src="images/sneaky/low-priv.PNG" alt="foothold" class="inline"/> 								<br/> <br/> <br/> <br/>
 					
 				We are dropped in a user shell as www-data. We can su over to the developer user as well, but we are still unable to 		<br/>
-				pull the user flag, as it is located in user low's directory.									<br/> <br/>
-					
-				I started out by running the standard linenum script. It pulls out some creds from an open .htpasswd file for <b> pypi.sneakycorp.htb </b> 			<br/><br/>
+				pull the user flag, as it is located in user low's directory. I started out by running the standard linenum script. It 		<br/>
+				pulls out some creds from an open .htpasswd file for <b> pypi.sneakycorp.htb </b> 						<br/><br/>
 				<img src="images/sneaky/pypi-creds.PNG" alt=".htpasswd creds" class="inline"/> 							<br/> <br/> <br/>
 				
 				Some further enumeration revealed this to be the port 8080 application that we were previously unable to see. 			<br/> <br/>
