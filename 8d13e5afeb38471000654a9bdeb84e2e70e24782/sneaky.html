@@ -35,8 +35,7 @@ body {
 				<img src="images/sneaky/gob1.PNG" alt="emails" class="inline"/> 								<br/> <br/> <br/>
 				<img src="images/sneaky/gob2.PNG" alt="emails" class="inline"/> 								<br/> <br/> <br/>
 					
-				Sadly <b>dev.sneakycorp.htb</b> appeared to have the same html as the normal sneakycorp.htb domain. I checked out the 		<br/>
-				webapp on port 8080 next. 													<br/> <br/>
+				Sadly <b>dev.sneakycorp.htb</b> appeared to have the same html as the normal sneakycorp.htb domain. I checked out the webapp on port 8080 next. <br/> <br/>
 				<img src="images/sneaky/8080-app.PNG" alt="web app on port 8080" class="inline"/> 						<br/> <br/> <br/>
 				
 				Not much to see there so I moved onto the FTP server. FTP appeared to be a dead end since at this point as we don't have 	<br/>
@@ -48,12 +47,11 @@ body {
 					
 				I opted to use a tool called swaks - <a href="https://github.com/jetmore/swaks">which you can checkout here</a> 		<br/> <br/>			
 					
-				I sent out an email to everyone on the list we found on <b>sneakycorp.htb</b>earlier, with the contents "Visit 10.10.14.2".	<br/>
-				Where 10.10.14.2 was my ip. 													<br/><br/>
+				I sent out an email to everyone on the list we found on <b>sneakycorp.htb</b> earlier, with the contents "Visit 10.10.14.2".	<br/><br/>
 				<img src="images/sneaky/swaks.PNG" alt="swaks" class="inline"/>									<br/> <br/> <br/>
 					
 					
-				In our netcat window we see an http connection attempt with the user Paul's creds.						<br/> <br/>
+				In netcat we see an http connection attempt with the user Paul's creds.								<br/> <br/>
 				<img src="images/sneaky/phished.PNG" alt="phished" class="inline"/> 								<br/> <br/> <br/>	
 					
 				We can see in the "Content-Type" header that the contents are url encoded.After urldecoding the above password, we get 		<br/> <br/>
@@ -69,11 +67,11 @@ body {
 				apt-get install evolution
 				</code> 															<br/><br/><br/>
 					
-				After installing evolution and setting it up with Paul's creds, we are able to see 2 emails in Paul's sent folder. 		<br/>
+				After installing evolution and setting it up with Paul's creds, we are able to see 2 emails in Paul's sent folder. 		<br/><br/>
 				Email #1 is a set of credentials for the developer user 									<br/><br/>
 				<img src="images/sneaky/smtp-creds.PNG" alt="Paul's emails" class="inline"/> 							<br/><br/><br/>
 					
-				Email #2 tells us that <b>all of the packages in pypi are ran and tested by the low user</b>. This may come in 			<br/>
+				Email #2 tells us that <b>all of the packages in pypi are ran and tested by the low user</b>. This may come in 			<br/><br/>
 				handy later if we need to pivot to the low user. 										<br/> <br/>
 				<img src="images/sneaky/smtp-info.PNG" alt="Paul's emails" class="inline"/> 							<br/> <br/> <br/>
 					
@@ -89,9 +87,9 @@ body {
 				Password: 	m^AsY7vTKVT+dV1{WOU%@NaHkUAId3]C	<br/><br/>
 				</code>							<br/><br/><br/>
 					
-				With developer creds, now we are able to log into the FTP server. There is a /dev/ directory which we have access to,		<br/>
-				that looks like the same directory that is served on <b> dev.sneakycorp.htb </b>. in theory we should be able to drop 		<br/>
-				a reverse shell in /dev/, and request that page in our browser to trigger the reverse connection back to our machine. 		<br/><br/><br/>
+				With developer creds, now we are able to log into the FTP server. There is a /dev/ directory that looks like the same directory that 	<br/><br/>
+				is served on <b> dev.sneakycorp.htb </b>. in theory we should be able to drop a reverse shell in /dev/, and request that page in our	<br/><br/>
+				browser to trigger the reverse connection back to our machine. 										<br/><br/><br/>
 					
 				I opted to use the php reverse shell from pentest monkey - <a href="http://pentestmonkey.net/tools/web-shells/php-reverse-shell">which you can checkout here</a> <br/> <br/>
 					
@@ -101,8 +99,9 @@ body {
 				After requesting the page in our browser we receive a connection back to our netcat listener						<br/> <br/>
 				<img src="images/sneaky/low-priv.PNG" alt="foothold" class="inline"/> 								<br/> <br/> <br/> <br/>
 					
-				We caught a user shell as www-data. We can su over to the developer user, but we are still unable to 			<br/>
-				read user.txt, as it is owned by user low. The standard linenum.sh script found an open .htpasswd file for <b> pypi.sneakycorp.htb </b><br/>
+				We caught a user shell as www-data. We can su over to the developer user, but we are still unable to 				<br/>
+				read user.txt, as it is owned by user low. To get a better idea of the system I ran the linenum.sh script. 			<br/>
+				It found an open .htpasswd file for <b> pypi.sneakycorp.htb </b><br/>								<br/><br/>
 				<img src="images/sneaky/pypi-creds.PNG" alt=".htpasswd creds" class="inline"/> 							<br/> <br/> <br/>
 				
 				Some further enumeration revealed this to be the port 8080 application that we were previously unable to see. 			<br/> <br/>
