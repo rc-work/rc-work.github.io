@@ -135,12 +135,12 @@ body {
 																  
 				With our newfound pypi creds in hand, we turn to the pypi documentation to figure out how to upload a package. 			<br/>
 				There are 2 files we need to setup. Firstly, we need a .pypirc file, which tells the system where to get the packages		<br/>
-				from and what creds to use. Secondly, we need a setup.py file which details what actions to perform to install it.		<br/><br/>
+				from and what creds to use. Secondly, we need a setup.py file which details what actions to perform to install it.		<br/><br/><br/>
 					
-				example .pypirc file from pypi docs											<br/><br/>
+				example .pypirc file from pypi docs												<br/><br/>
 				<img src="images/sneaky/pypi-setup2.PNG" alt="pypi docs" class="inline"/>							<br/><br/><br/>
 				
-				example setup.py file from pypi docs														<br/><br/>
+				example setup.py file from pypi docs												<br/><br/>
 				<img src="images/sneaky/pypi-setup1.PNG" alt="pypi docs" class="inline"/>							<br/><br/><br/>
 					
 				The basic idea is that we build these on our host kali system, and then transfer them over to sneakymailer. We then		<br/>
@@ -148,9 +148,22 @@ body {
 					
 				<img src="images/sneaky/setup-py.PNG" alt="setup.py" class="inline"/>								<br/><br/><br/>
 				<img src="images/sneaky/pypirc.PNG" alt="pypirc" class="inline"/>								<br/><br/><br/>
-				
-				
 					
+				I transferred these two files over into the /tmp directory on sneakymailer, and then added the /tmp directory into my path with	<br/><br/><br/>
+				
+				<code>
+				HOME=`pwd`
+				</code>																<br/><br/><br/>
+					
+				
+				I then started up my netcat listener and attempted to upload the package							<br/><br/>
+				<img src="images/sneaky/pypi.PNG" alt="pypirc" class="inline"/>									<br/><br/><br/>
+				
+				It succeeded, so I checked my netcat listener											<br/><br/>
+				<img src="images/sneaky/user-txt.PNG" alt="pypirc" class="inline"/>								<br/><br/><br/>
+				
+				<b> We got user !! </b>														<br/><br/><br/>
+				
 				
 				
 					
