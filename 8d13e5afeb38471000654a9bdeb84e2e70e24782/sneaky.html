@@ -168,19 +168,15 @@ body {
 				on sneakymailer as the developer user. Then it is ran a 2nd time when the low user grabs and executes it. Our nc one liner is		<br/>
 				getting executed by the dev user first, and then we arent able to see the connection attempt from low. We can do a simple os.getuid() 	<br/>
 				check in the setup.py script to see if we are executing as dev or low, if we match low's UID run nc, otherwise do nothing. 		<br/><br/>
+				
+				We can see user lows uid in /etc/passwd												<br/><br/>
+				<img src="images/sneaky/etc-passwd.PNG" alt="/etc/passwd" class="inline"/>							<br/><br/><br/>
 					
-				setup.py															<br/><br/>
+				So I edited setup.py to check for uuid == 1000											<br/><br/>
 				<img src="images/sneaky/setup-py.PNG" alt="setup.py" class="inline"/>								<br/><br/><br/>
 				
 					
-				I transferred setup.py and .pypirc over into the /tmp/ directory, and added the /tmp/ directory into my path with		<br/><br/><br/>
-				
-				<code>
-				HOME=`pwd`
-				</code>																<br/><br/><br/>
-					
-				
-				After starting up my netcat listener, I uploaded the package									<br/><br/>
+				I transferred setup.py and .pypirc over into the /tmp/ directory. After starting up my netcat listener, I uploaded the package	<br/><br/>
 				<img src="images/sneaky/pypi.PNG" alt="pypi package upload" class="inline"/>							<br/><br/><br/>
 				
 				We got a 200 status OK, and over in nc												<br/><br/>
