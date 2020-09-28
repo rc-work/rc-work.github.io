@@ -41,16 +41,11 @@ body {
 				Not much to see there so I moved onto the FTP server. FTP appeared to be a dead end since at this point as we don't have 	<br/>
 				any creds and there is no guest access. With nothing but a list of emails and the box being named "sneakymailer", I figured	<br/>
 				a phishing attempt could be worth a shot. Maybe there is a program setup to click on every link for a couple users. 		<br/> <br/>
-
-				
-					
 					
 				I opted to use a tool called swaks - <a href="https://github.com/jetmore/swaks">which you can checkout here</a> 		<br/> <br/>			
 					
-				I sent out an email to everyone on the list we found on <b>sneakycorp.htb</b> earlier, with the contents "Checkout our new 	<br/>
-				webserver http://10.10.14.29".													<br/><br/>
+				I sent out an email to everyone on the list found earlier, with the contents "Checkout our new webserver http://10.10.14.29".	<br/> <br/>
 				<img src="images/sneaky/swaks.PNG" alt="swaks" class="inline"/>									<br/> <br/> <br/>
-					
 					
 				In netcat we see an http connection attempt with the user Paul's creds.								<br/> <br/>
 				<img src="images/sneaky/phished.PNG" alt="phished" class="inline"/> 								<br/> <br/> <br/>	
@@ -159,7 +154,6 @@ body {
 				I created my setup.py like below												<br/><br/>
 				<img src="images/sneaky/setup-initial.PNG" alt="setup.py" class="inline"/>							<br/><br/><br/>
 					
-					
 				At this point uploading a pypi package with the above two files results in catching yet another shell as the dev user.		<br/>
 				The whole point of doing this was to pivot to the low user, and he should be executing these packages according to the email 	<br/>
 				we read earlier. So what is going on?												<br/><br/><br/>
@@ -174,7 +168,6 @@ body {
 					
 				So I edited setup.py to check for uuid == 1000											<br/><br/>
 				<img src="images/sneaky/setup-py.PNG" alt="setup.py" class="inline"/>								<br/><br/><br/>
-				
 					
 				I transferred setup.py and .pypirc over into the /tmp/ directory. After starting up my netcat listener, I uploaded the package	<br/><br/>
 				<img src="images/sneaky/pypi.PNG" alt="pypi package upload" class="inline"/>							<br/><br/><br/>
