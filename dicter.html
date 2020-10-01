@@ -89,7 +89,7 @@ body {
         		print("[-] Login failed.. exiting")						
         		exit(0)										
     		print("[+] Login success")								
-	</pre>																
+	</pre>	<br/><br/><br/><br/>															
 	
 	After some enumeration, it became apparent that the posts were not being sanitized whatsoever, and we can directly inject html. 	<br/>
 	The challenge now becomes how can we inject html such that when	it gets executed we receive a reverse shell.				<br/> <br/>
