@@ -91,18 +91,16 @@ body {
     		print("[+] Login success")								
 	</pre>																
 	
-	After some enumeration, it became apparent that the posts were not being sanitized whatsoever, 				<br/>
-	and we can directly inject html. The challenge now becomes how can we inject html such that when			<br/>
-	it gets executed we receive a reverse shell.										<br/> <br/>
+	After some enumeration, it became apparent that the posts were not being sanitized whatsoever, and we can directly inject html. 	<br/>
+	The challenge now becomes how can we inject html such that when	it gets executed we receive a reverse shell.				<br/> <br/>
 		
 	I found an awesome <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection#jinja2"> html injection resource here </a> <br/><br/>
 
-	Initially I tried the basic jinja2 injection, trying to see if we can get the server to execute {4*4*4} on the archives page, 					<br/>
-	if successfull we should see the number 64 presented to us. 													<br/><br/>
-	<img src="images/doctor/jinja2-basic.PNG" alt="web page" class="inline"/>         				<br/> <br/> <br/>
+	Initially I tried the basic jinja2 injection															<br/> <br/>
+	<img src="images/doctor/jinja2-basic.PNG" alt="web page" class="inline"/>         										<br/> <br/> <br/>
 		
-	We can see on the archives page source that our code is inside 							<br/>																													<br/>
-	of both a title and item bracket, so our injection will start out closing those first.				<br/> <br/><br/>
+	I tried to see if we could get the server to execute {4*4*4} so that when we query /archives, the number 64 is presented.					<br/>
+	We can see on the archives page source that our code is inside of both a title and item bracket, so our injection will start out closing those first.		<br/> <br/><br/>
 
 	After injecting 												<br/><br/>
 	<code>
