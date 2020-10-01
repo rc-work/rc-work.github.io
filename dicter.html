@@ -38,12 +38,12 @@ body {
 	The contact us page on the webserver has a link to the domain <b> doctors.htb </b>, this was sort of login portal	<br/> <br/>
 	<img src="images/doctor/login-page.PNG" alt="nmap" class="inline"/>         						<br/> <br/> <br/>
 
-	After creating a new account and logging in, there is a page to create a new post/comment, and an /archive page		<br/>
-	to display these comments. 												<br/> <br/>
+	After creating a new account and logging in, there is a page to create a new post/comment, and an /archive page	to display these comments. <br/> <br/>
 
 	After some enumeration, it became apparent that the posts were not being sanitized whatsoever, and we can directly inject html. 	<br/>
+	<img src="images/doctor/inject1.PNG" alt="nmap" class="inline"/>         								<br/> <br/> <br/>	  
+	
 	The challenge now becomes how can we inject html such that when	it gets executed we receive a reverse shell.				<br/> <br/>
-		
 	I found an awesome <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection#jinja2"> html injection resource here </a> <br/><br/>
 
 	Initially I tried the basic jinja2 injection															<br/> <br/>
@@ -165,8 +165,8 @@ body {
         		l.interactive()
 	</pre> <br/> <br/> <br/> <br/>
 
-	The end result is a user shell as web on doctor.														<br/><br/>
-	<img src="images/doctor/low-priv-script.PNG" alt="user script" class="inline"/>   										<br/> <br/> <br/>
+	The end result is a user shell as web on doctor.								<br/><br/>
+	<img src="images/doctor/low-priv-script.PNG" alt="user script" class="inline"/>   				<br/> <br/> <br/>
 
 
         </p>
