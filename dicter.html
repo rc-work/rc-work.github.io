@@ -93,18 +93,18 @@ body {
         				print("[-] Login failed.. exiting")						<br/>
         				exit(0)										<br/>
     				print("[+] Login success")								<br/>
-			</code>											
+			</code>												<br/><br/>					
 
 			The next challenge is to figure out our injection. I found an awesome <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection#jinja2"> resource here </a> <br/><br/>
 
-			Initially I tried the basic injection, trying to see if we can get the server to execute {4*4*4} on the archives page, 						<br/>
+			Initially I tried the basic jinja2 injection, trying to see if we can get the server to execute {4*4*4} on the archives page, 					<br/>
 			if successfull we should see the number 64 presented to us. 													<br/><br/>
 
 			We can see on the archives page source that our code is inside 																																		<br/>
 			of both a title and item bracket, so our injection will start out closing those first.		<br/> <br/>
 
 			<code>
-				<item><title> OUR-POST-GETS-INJECTED-HERE 	</item></title>
+				&lt;item&gt;&lt;title&gt; OUR-POST-GETS-INJECTED-HERE 	&lt;/item&gt;&lt;/title&gt;
 			</code>
 
 			After injecting
