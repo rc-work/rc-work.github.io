@@ -42,8 +42,7 @@ body {
 	to display these comments. 												<br/> <br/>
 
 	The website only allows us to create a user thats valid for 20m, this became a pain as I was testing commands.		<br/>
-	I opted to write a simple python script to generate a new account, and upload a post with our injection.		<br/>
-	The following code will randomly generate a string, register a new account with that string, and login.			<br/><br/><br/><br/>
+	I opted to write a simple python script to generate a new account, and login.		<br/> <br/><br/><br/><br/>
 
 	<pre>
 	#!/usr/bin/python3									
@@ -126,9 +125,9 @@ body {
 	next step was to see if we can run bash. It turned out successful and we got the shell back			<br/> <br/>
 	<img src="images/doctor/jinja-popen.PNG" alt="popen example" class="inline"/>         				<br/> <br/> <br/>
 
-	From here I threw in our successful injection into the python script and we arrive at the final code		<br/> <br/>
+	From here I threw in our successful injection into the python script and we arrive at the final code		<br/> <br/><br/> <br/>
 
-
+	<h1> User.py script </h1>
 	<pre>
 
 	#!/usr/bin/python3
@@ -205,8 +204,8 @@ body {
         		l.interactive()
 	</pre><br/> <br/> <br/>
 
-	Our final code will register a new account under a random string, login, create a post with our bash injection, startup a nc listener, and then finally 	<br/>
-	query the /archives page to trigger the connection. The end result is a user shell as web on doctor.								<br/><br/>
+	Our final code registers a new account under a random string, logs in, creates a post with our bash injection, starts a nc listener, and then finally 		<br/>
+	queries the /archives page to trigger the connection. The end result is a user shell as web on doctor.								<br/><br/>
 	<img src="images/doctor/low-priv-script.PNG" alt="user script" class="inline"/>   										<br/> <br/> <br/>
 
 
