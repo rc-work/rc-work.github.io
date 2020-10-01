@@ -102,17 +102,17 @@ body {
 	<img src="images/doctor/jinja2-basic.PNG" alt="web page" class="inline"/>         				<br/> <br/> <br/>
 		
 	We can see on the archives page source that our code is inside 							<br/>																													<br/>
-	of both a title and item bracket, so our injection will start out closing those first.				<br/> <br/>
+	of both a title and item bracket, so our injection will start out closing those first.				<br/> <br/><br/>
 
-	After injecting 												<br/>
+	After injecting 												<br/><br/>
 	<code>
 		&lt;/title&gt; &lt;/item&gt; {4*4*4}
-	</code>														<br/> <br/>
+	</code>														<br/> <br/><br/>
 
-	The source code should look like										<br/>
+	The source code should look like										<br/><br/>
 	<code>
 		&lt;item>&lt;title&gt; &lt;/item>&lt;/title&gt; {4*4*4}&lt;/item&gt;&lt;/title&gt;
-	</code>														<br/> <br/>
+	</code>														<br/> <br/><br/>
 
 	We can see the expected output, 64, on the archives page							<br/><br/>
 	<img src="images/doctor/inject2.PNG" alt="basic injection" class="inline"/>         				<br/> <br/> <br/>
@@ -207,11 +207,9 @@ body {
         		l.interactive()
 	</pre>
 
-	Our final code will register a new account under a random string, login,			<br/>
-	create a post with our bash injection, startup a nc listener, and then finally 			<br/>
-	query the /archives page to trigger the connection. The end result is a user 			<br/>
-	shell as web on doctor.										<br/><br/>
-	<img src="images/doctor/low-priv-script.PNG" alt="user script" class="inline"/>   		<br/> <br/> <br/>
+	Our final code will register a new account under a random string, login, create a post with our bash injection, startup a nc listener, and then finally 			<br/>
+	query the /archives page to trigger the connection. The end result is a user shell as web on doctor.										<br/><br/>
+	<img src="images/doctor/low-priv-script.PNG" alt="user script" class="inline"/>   												<br/> <br/> <br/>
 
 
         </p>
