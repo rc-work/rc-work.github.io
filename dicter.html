@@ -124,12 +124,10 @@ body {
 
 
 	I successfully attempted it with the /usr/bin/whoami command and got a response back. My			<br/>
-	next step was to see if we can run bash. It turned out successful and we got the shell back			<br/> <br/>
-	<img src="images/doctor/jinja-popen.PNG" alt="popen example" class="inline"/>         				<br/> <br/> <br/>
-
+	next step was to see if we can run bash. It turned out successful and we got the shell back.			<br/> 
 	From here I threw in our successful injection into the python script and we arrive at the final code		<br/> <br/><br/> <br/>
 
-	<h1> User.py script </h1>
+	<h1> User.py </h1>
 	<pre>
 
 	#!/usr/bin/python3
@@ -204,7 +202,7 @@ body {
         		archive = session.get(archive_url, timeout=0.5)
     		except:
         		l.interactive()
-	</pre><br/> <br/> <br/>
+	</pre> <br/> <br/> <br/> <br/>
 
 	Our final code registers a new account under a random string, logs in, creates a post with our bash injection, starts a nc listener, and then finally 		<br/>
 	queries the /archives page to trigger the connection. The end result is a user shell as web on doctor.								<br/><br/>
