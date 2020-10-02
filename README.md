@@ -1,4 +1,4 @@
-Personal writeups for hackthebox.eu platform,     
+<h1>Hackthebox.eu Writeups</h1>     
 All active machines have the writeup encrypted with the root hash from /etc/shadow         
 
 <a href="https://rc-work.github.io/remote.html">Remote </a>        
