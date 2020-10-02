@@ -77,11 +77,12 @@ body {
 	At this point we have all we need to get a shell. I started creating a python script to easily do all this.	<br/><br/>
 	
 	<pre>
-	First step is to grab all of our headers/cookies on the 3 necessary requests
-		  - register new account
-		  - login to new account
-		  - create a new post
-		  - visit /archives
+	First step is to grab all of our headers/cookies on the 3 necessary requests. 
+	   - register new account
+	   - login to new account
+           - create a new post
+	   
+	We can fire up burpsuite and manually do these 3 actions, and then grab our headers/cookies in burp.
 	</pre>
 	<img src="images/doctor/burp-register-post.PNG" alt="register new account req" class="inline"/>         				<br/> <br/> <br/>
 	<img src="images/doctor/burp-login-post.PNG" alt="login to new account req" class="inline"/>         					<br/> <br/> <br/>
