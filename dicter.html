@@ -51,8 +51,8 @@ body {
 	I found an awesome <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection#jinja2"> html injection resource here </a> <br/><br/>
 	<img src="images/doctor/jinja2-basic.PNG" alt="web page" class="inline"/>         							<br/> <br/> <br/>
 		  
-	Initially I tried the basic jinja2 injection. I tried to see if we could get the server to execute {4*4*4} so that when we query /archive, the number 				<br/> 
-	64 is presented. We can see on the archive page source that our code is inside of both a title and item bracket, so our injection will start out closing those first.		<br/> <br/><br/>
+	Initially I tried the basic injection. I tried to get the server to execute {4*4*4} so that when we query /archive, the number 64 is presented. 		<br/>
+	We can see on the archive page source that our code is inside of both a title and item bracket, so our injection will start out closing those first.		<br/> <br/><br/>
 
 	After injecting 												<br/><br/>
 	<code>
