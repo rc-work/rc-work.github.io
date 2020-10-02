@@ -38,10 +38,10 @@ body {
 	The contact us page on the webserver has a link to the domain <b> doctors.htb </b>, this was sort of login portal	<br/> <br/>
 	<img src="images/doctor/login-page.PNG" alt="nmap" class="inline"/>         						<br/> <br/> <br/>
 
-	After creating a new account and logging in, there is a page to create a new post/comment, and an /archive page	to display these comments. 	<br/> <br/>
-	<img src="images/doctor/inject1-post.PNG" alt="nmap" class="inline"/>         									<br/> <br/> <br/>
+	After creating a new account and logging in, there is a page to create a new post/comment.			 	<br/> <br/>
+	<img src="images/doctor/inject1-post.PNG" alt="nmap" class="inline"/>         						<br/> <br/> <br/>
 		  
-	In the page source there is a hidden link to the /archives page, which appears to display our comments/posts.				<br/> <br/>
+	In the page source there is a hidden link to the /archives page, which appears to display our posts/comments.				<br/> <br/>
 	<img src="images/doctor/archive.PNG" alt="nmap" class="inline"/> 									<br/> <br/> <br/>
 		  
 	The posts are not being sanitized whatsoever, and we can directly inject html in the /archives page. 					<br/> <br/>
