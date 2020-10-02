@@ -27,9 +27,9 @@
    position: absolute;
    margin: 0;
    padding: 0;
-   color: #000000;
+   color: #FF0000;
    text-align: center;
-   top: 75%;
+   top: 65%;
    left: 50%;
    -webkit-transform: translate3d(-50%, -50%, 0);
    transform: translate3d(-50%, -50%, 0);
