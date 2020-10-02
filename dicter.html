@@ -77,29 +77,18 @@ body {
 	At this point we have all we need to get a shell. I started creating a python script to easily do all this.	<br/><br/>
 	
 	
-	First step is to grab all of our headers/cookies on the 3 necessary requests. 					<br/>
-	 -- register new account											<br/>
-	 -- login to new account											<br/>
-         -- create a new post												<br/>
-	   
-	We can fire up burpsuite and manually do these 3 actions, and then grab our headers/cookies in burp.					<br/><br/><br/>
+	First step is to grab all of our headers/cookies on the 3 necessary requests. 					<br/> <br/>
+	Registering a new account											<br/> <br/>
+	<img src="images/doctor/burp-register-post.PNG" alt="register new account req" class="inline"/>         	<br/> <br/> <br/>
+		  
+	Login to new account												<br/> <br/>
+	<img src="images/doctor/burp-login-post.PNG" alt="login to new account req" class="inline"/>         		<br/> <br/> <br/>
+		  
+	Post comment from new account											<br/> <br/>
+	<img src="images/doctor/burp-post-comment.PNG" alt="create new comment req" class="inline"/>         		<br/> <br/> <br/><br/><br/>
 	
-	<img src="images/doctor/burp-register-post.PNG" alt="register new account req" class="inline"/>         				<br/> <br/> <br/>
-	<img src="images/doctor/burp-login-post.PNG" alt="login to new account req" class="inline"/>         					<br/> <br/> <br/>
-	<img src="images/doctor/burp-post-comment.PNG" alt="create new comment req" class="inline"/>         					<br/> <br/> <br/><br/><br/>
 	
-	
-	I then started on the python script								</br>							
-	<pre>
-	The script will:
-	   #1 - generate a random string and register a new account under that string
-   	   #2 - login to that account
-	   #3 - create a post with our bash injection 
-	   #4 - startup a nc listener
-	   #5 - visit /archive to trigger our reverse shell
-	</pre> <br/> <br/><br/> <br/>
-		
-		
+	I then developed the below python script									</br> </br> </br>							
 	<h1> User.py </h1>
 	<pre>
 
@@ -180,6 +169,9 @@ body {
 
 	The end result is a user shell as web on doctor.								<br/><br/>
 	<img src="images/doctor/low-priv-script.PNG" alt="user script" class="inline"/>   				<br/> <br/> <br/>
+
+	The script generates a random string, registers a new account under that string, logs in and creates a new post, 	<br/>
+	starts up a nc listener, and finally visits the /archive page to trigger the connection.				<br/><br/>
 
 
         </p>
