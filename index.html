@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 
-
 <style>
-   .large-header {
+.large-header {
    position: relative;
    width: 100%;
    background: #111;
@@ -13,19 +12,36 @@
 }
 
 .demo .large-header {
-   background-image: url("https://www.storeautomator.com/wp-content/uploads/2019/12/AdobeStock_274929184-scaled.jpeg");
+   background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/499416/demo-bg.jpg");
 }
 
 .main-title {
    position: absolute;
    margin: 0;
    padding: 0;
-   color: ##000000;
+   color: #F9F1E9;
    text-align: center;
    top: 50%;
    left: 50%;
    -webkit-transform: translate3d(-50%, -50%, 0);
    transform: translate3d(-50%, -50%, 0);
+}
+.description {
+   position: absolute;
+   margin: 0;
+   padding: 0;
+   color: #000000;
+   text-align: center;
+   top: 75%;
+   left: 50%;
+   -webkit-transform: translate3d(-50%, -50%, 0);
+   transform: translate3d(-50%, -50%, 0);
+}
+
+.demo .main-title {
+   text-transform: uppercase;
+   font-size: 4.2em;
+   letter-spacing: 0.1em;
 }
 
 .demo .main-title {
@@ -45,12 +61,15 @@
 }
 </style>
 
-
 <div class="container demo">
    <div class="content">
       <div id="large-header" class="large-header">
          <canvas id="demo-canvas"></canvas>
-         <h1 class="main-title"><span class="thin">HTB</span> Writeups </br></br> </h1>
+    <h1 class="main-title"><span class="thin">HTB</span> Writeups </br></br> </br> </h1>
+    <h2 class="description"> <a href="https://rc-work.github.io/remote.html"> Remote </a> </br></br>
+    <a href="https://rc-work.github.io/sneakymailer.html"> SneakyMailer</a> </br></br>
+    <a href="https://rc-work.github.io/doctor.html"> Doctor </a> </br></br>
+         
       </div>
    </div>
-</div>   
+</div>
