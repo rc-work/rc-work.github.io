@@ -46,8 +46,7 @@ body {
 	
 	The challenge now becomes how can we inject html such that when	it gets executed we receive a reverse shell.				<br/> <br/>
 	I found an awesome <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection#jinja2"> html injection resource here </a> <br/><br/>
-	<img src="images/doctor/jinja2-basic.PNG" alt="web page" class="inline"/>         										<br/> <br/> <br/>
-	
+	<img src="images/doctor/jinja2-basic.PNG" alt="web page" class="inline"/>         							<br/> <br/> <br/>
 		  
 	Initially I tried the basic jinja2 injection. I tried to see if we could get the server to execute {4*4*4} so that when we query /archives, the number 				<br/> 
 	64 is presented. We can see on the archives page source that our code is inside of both a title and item bracket, so our injection will start out closing those first.		<br/> <br/><br/>
@@ -75,7 +74,7 @@ body {
 	I successfully attempted it with the /usr/bin/whoami command and got a response back as dev. My next step was to see if we can run bash. 		<br/> 
 	It turned out successful and we got the shell back. This was quite a pain to do manually, so I opted to create a python script. I first			<br/> 
 	configured the burp suite proxy, then I manually created a new user, created a post, and then requested the /archives page. I grabbed 			<br/> 
-	the headers/cookies that we will need for all 3 actions. I then started on the python script								<br/> <br/> 
+	the headers/cookies that we will need for all 3 actions. I then started on the python script								<br/> <br/> <br/> 
 	
 	<pre>
 	The script will:
