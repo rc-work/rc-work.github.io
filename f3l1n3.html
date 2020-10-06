@@ -72,8 +72,8 @@ body {
 	 Let's generate our rev shell command and try to enocode with YSoSerial. I started out with a simple bash one liner.											<br/> <br/>			
 	 <img src="images/feline/bash-one-liner.PNG" alt="bash one liner" class="inline"/> 															<br/> <br/> <br/> 
 	 	
-	 Now to run complex commands that pipe command into other commands in java, the arguments need to be a string Array. This presents									<br/> 
-	 problems for us as our command is fairly complex. Basically, we need to find a way to run our bash one liner without using spaces.									<br/> <br/> 
+	 Now to run complex commands involving piping in java, the arguments need to be a string Array. This presents problems for us as our command is fairly complex. 					<br/>
+	 Basically, our bash command will run and the arguments will run as seperate commands, which is not what we want. So we need to create a string array with our bash command. 				<br/> <br/>
 	 
 	 <a href="http://jackson-t.ca/runtime-exec-payloads.html">I found a cool site here which formats your JRE payload for you</a>										<br/> <br/> 
 	 <img src="images/feline/jre-payload.PNG" alt="JRE payload" class="inline"/> 																<br/> <br/> <br/> 
