@@ -35,14 +35,13 @@ body {
 	 I uploaded a sample to checkout the request in burp																							<br/> <br/>
 	 <img src="images/feline/burp-upload.PNG" alt="burpsuite upload request" class="inline"/> 																		<br/> <br/> <br/>
 	 
-	 The site is passing the email and filename in headers, and passing the file as an image. We can also see that the requests are sent to /upload.jsp to be evaluated.									<br/> <br/>
-	 
+	 The site is passing the email and filename in headers, and passing the file as an image. We can also see that the requests are sent to /upload.jsp to be evaluated.									<br/> 
 	 Some digging into tomcat 9.0.27 revealed this is potentially vulnerable to a deserialization attack (CVE-2020-9484)															<br/> <br/>
 	 <img src="images/feline/apache-vuln.PNG" alt="tomcat vuln" class="inline"/> 																				<br/> <br/> <br/>
 	 
 	 <a href="https://github.com/masahiro331/CVE-2020-9484">There is a poc linked in several of the cve info pages (CVE-2020-9484)</a> 													<br/> <br/>
 	 
-	 I attempted to run this to see if this apache tomcat install appears vulnerable. I was able to succesfully upload the groovy session, but unable to trigger the stack traceback. 							<br/> <br/>                       
+	 I attempted to run this, I was able to succesfully upload the groovy session, but unable to trigger the stack traceback. 							<br/> <br/>                       
 	 <img src="images/feline/user-1st-try.PNG" alt="POC exploit" class="inline"/> 																				<br/> <br/> <br/>
 	 
 	 I started thinking this was caused by an invalid upload path. The POC shows the default upload path to be <b>/usr/local/tomcat/</b> though we have not confirmed this on our instance. I started playing around with uploads		<br/>
