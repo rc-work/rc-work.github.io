@@ -57,12 +57,11 @@ body {
 	 So far we have confirmed our target is vulnerable to <b>CVE-2020-9484</b>, and we are able to successfully trigger a stack traceback attempting to execute our file.									<br/> <br/>
 	 
 	 Since this is a vulnerability centered around insecure deserialization, we will now need to serialize our payload. Some digging around google revealed YSoSerial to be the most popular tool.						<br/> 
-	 The exploitation examples for YSoSerial that I was able to find all followed the same format. Generate a bash payload, base64 encode the bash payload, serialize the payload with YSoSerial, and shoot it at the server.		<br/> <br/>
+	 The exploitation examples for YSoSerial that I was able to find all followed the same format. Generate a bash payload, serialize the payload with YSoSerial, and shoot it at the server (usually through burpsuite).			<br/> <br/>
 	 
 	 From here we need to do a couple things:
 	 <ol>
 		 <li> Generate a bash rev shell one liner 						    </li>
-		 <li> Base64 encode the command 							    </li>
 		 <li> Use YSoSerial to serialize our encoded command and create the .session file           </li>
 		 <li> Start up a nc listener								    </li>
 		 <li> Curl command to upload our new .session file		    			    </li>
@@ -70,7 +69,15 @@ body {
 		 <li> Interact with our nc listener							    </li>
 	 </ol>
 	 
-	 Let's generate our rev shell command and try to enocode with YSoSerial 																					<br/> <br/>			
+	 Let's generate our rev shell command and try to enocode with YSoSerial. I started out with a simple bash one liner.											<br/> <br/>			
+	 <img src="images/feline/bash-one-liner.PNG" alt="bash one liner" class="inline"/> 															<br/> <br/> <br/> 
+	 	
+	 Now to run complex commands that pipe command into other commands in java the arguments needs to be a string Array. This presents									<br/> 
+	 problems for us as our command is fairly complex. Basically, we need to find a way to run our bash one liner without using spaces.									<br/> <br/> 
+	 
+	 <a href="http://jackson-t.ca/runtime-exec-payloads.html">I found a cool site here which formats your jre payload for you</a>										<br/> <br/> 
+	 <img src="images/feline/jre-payload.PNG" alt="JRE payload" class="inline"/> 																<br/> <br/> <br/> 
+ 
 	 
 	 
 	 
