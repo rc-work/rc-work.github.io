@@ -35,10 +35,7 @@ body {
 	 Some digging into tomcat 9.0.27 revealed this is potentially vulnerable to a deserialization attack (CVE-2020-9484)		<br/> <br/>
 	 <img src="images/feline/apache-vuln.PNG" alt="tomcat vuln" class="inline"/> 							<br/> <br/> <br/>
 	 
-	 There are initially 3 prereqs that need to be met -										<br/> <br/>
-	 <img src="images/feline/cve-prereqs.PNG" alt="web page" class="inline"/> 							<br/> <br/> <br/>
-	 
-	 If we can satisfy those, it looks like we can attain RCE. <a href="https://github.com/masahiro331/CVE-2020-9484">There is a poc linked in several of the cve info pages</a> <br/> <br/>
+	 <a href="https://github.com/masahiro331/CVE-2020-9484">There is a poc linked in several of the cve info pages</a> <br/> <br/>
 	 <img src="images/feline/gh-poc.PNG" alt="POC exploit" class="inline"/> 							<br/> <br/> <br/>
 	 
 	 I attempted to run this to see if this apache tomcat install appears vulnerable						<br/> <br/>
