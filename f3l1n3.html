@@ -35,7 +35,7 @@ body {
 	 I uploaded a sample to checkout the request in burp																							<br/> <br/>
 	 <img src="images/feline/burp-upload.PNG" alt="burpsuite upload request" class="inline"/> 																		<br/> <br/> <br/>
 	 
-	 The site is passing the email and filename in headers, and passing the file as an image. We can also see that the requests are sent to /upload.jsp to be evaluated.									<br/> 
+	 The site is passing the email and filename through variables, and passing the file as an image. We can also see that the requests are sent to /upload.jsp to be evaluated.									<br/> 
 	 Some digging into tomcat 9.0.27 revealed this is potentially vulnerable to a deserialization attack (CVE-2020-9484)															<br/> <br/>
 	 <img src="images/feline/apache-vuln.PNG" alt="tomcat vuln" class="inline"/> 																				<br/> <br/> <br/>
 	 
