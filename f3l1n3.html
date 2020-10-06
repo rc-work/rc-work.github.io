@@ -40,17 +40,16 @@ body {
 	 Some digging into tomcat 9.0.27 revealed this is potentially vulnerable to a deserialization attack (CVE-2020-9484)															<br/> <br/>
 	 <img src="images/feline/apache-vuln.PNG" alt="tomcat vuln" class="inline"/> 																				<br/> <br/> <br/>
 	 
-	 <a href="https://github.com/masahiro331/CVE-2020-9484">There is a poc linked in several of the cve info pages</a> 															<br/> <br/>
-	 <img src="images/feline/gh-poc.PNG" alt="POC exploit" class="inline"/> 																				<br/> <br/> <br/>
+	 <a href="https://github.com/masahiro331/CVE-2020-9484">There is a poc linked in several of the cve info pages (CVE-2020-9484)</a> 													<br/> <br/>
 	 
 	 I attempted to run this to see if this apache tomcat install appears vulnerable. I was able to succesfully upload the groovy session, but unable to trigger the stack traceback. 							<br/> <br/>                       
 	 <img src="images/feline/user-1st-try.PNG" alt="POC exploit" class="inline"/> 																				<br/> <br/> <br/>
 	 
-	 I started thinking that this was because of the upload path. The POC shows the default upload path to be <b>/usr/local/tomcat/</b> though we have not confirmed this on our instance. I started playing around with uploads		<br/>
+	 I started thinking this was caused by an invalid upload path. The POC shows the default upload path to be <b>/usr/local/tomcat/</b> though we have not confirmed this on our instance. I started playing around with uploads		<br/>
 	 via curl. After passing an empty filename, along with a valid image I was able to trigger a stack traceback that revealed the upload path to us.											<br/> <br/> <br/>
 	 <img src="images/feline/upload-location.PNG" alt="POC exploit" class="inline"/> 																			<br/> <br/> <br/>
 	 
-	 Now can try to rerun the earlier POC exploit with our updated path <b>(/opt/samples/uploads/)</b>. We are able to see the full stack traceback as expected, thus confirming this vulnerability.					<br/> <br/> 
+	 Now can try to rerun the earlier POC exploit with our updated path <b>(/opt/samples/uploads/)</b>. We are able to see the full stack traceback as expected, thus confirming thea vulnerability.					<br/> <br/>                                 
 	 <img src="images/feline/poc-confirmed.PNG" alt="POC exploit" class="inline"/> 																				<br/> <br/> <br/>
 	 
 	 
