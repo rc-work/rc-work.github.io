@@ -23,7 +23,7 @@ body {
  <p>
  	<img src="images/feline/feline.PNG" alt="feline" class="inline"/> 																					<br/> <br/> <br/> <br/>
 	 
-	 <h2><i>RECON</i></h2>
+	 <h2><i>RECON</i></h2>																											<br/> <br/>
 	 
 	 We start out with the usual nmap scan 																									<br/> <br/>
 	<img src="images/feline/nmap.PNG" alt="nmap" class="inline"/> 																						<br/> <br/> <br/>
@@ -50,10 +50,26 @@ body {
 	 I started testing funky characters on the upload endpoint and discovered after passing an empty filename, I was able to trigger a stack traceback that revealed the upload path to us.							<br/> <br/> <br/>
 	 <img src="images/feline/upload-location.PNG" alt="POC exploit" class="inline"/> 																			<br/> <br/> <br/>
 	 
-	 Now we can try to rerun the earlier POC exploit with our updated path <b>(/opt/samples/uploads/)</b>. We are able to see the full stack traceback as expected, thus confirming thea vulnerability.					<br/> <br/>                                 
+	 Now we can try to rerun the earlier POC exploit with our updated path <b>(/opt/samples/uploads/)</b>. We are able to see the full stack traceback as expected, thus confirming the vulnerability.					<br/> <br/>                                 
 	 <img src="images/feline/poc-confirmed.PNG" alt="POC exploit" class="inline"/> 																				<br/> <br/> <br/> <br/> <br/> <br/>
 	 
-	 <h3><i>EXPLOITATION</i></h3>
+	 <h3><i>EXPLOITATION</i></h3>																										<br/> <br/>
+	 So far we have confirmed our target is vulnerable to CVE-2020-9484, and we are able to successfully trigger a stack traceback attempting to execute our file.										<br/> <br/>
+	 
+	 Since this is a vulnerability centered around insecure deserialization, we will now need to serialize our payload. Some digging around google revealed YSoSerial to be the most popular tool.						<br/> <br/>
+	 
+	 From here we need to do a couple things:
+	 <ol>
+		 <li> Generate a bash rev shell one liner 						    </li>
+		 <li> Base64 encode the command 							    </li>
+		 <li> Use YSoSerial to serialize our encoded command and create the .session file           </li>
+		 <li> Start up a nc listener								    </li>
+		 <li> Curl command to upload our new .session file		    			    </li>
+		 <li> Curl command to execute our new .session file		    			    </li>
+		 <li> Interact with our nc listener							    </li>
+	 </ol>
+	 
+	 Let's generate our rev shell command and try to enocode with YSoSerial 																					<br/> <br/>			
 	 
 	 
 	 
