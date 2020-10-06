@@ -97,22 +97,22 @@ body {
 
 	# Helper func to generate random filename
 	def get_random_string(length):
-    	letters = string.ascii_lowercase
-    	result_str = ''.join(random.choice(letters) for i in range(length))
-    	return result_str
+    		letters = string.ascii_lowercase
+    		result_str = ''.join(random.choice(letters) for i in range(length))
+    		return result_str
 
 
 	# Helper func to run bash
 	def run_bash(cmd):
-    	print(colored('\n' + str(cmd), 'green')) 
-    	p = process(cmd, shell=True)
-    	err = p.recvall()
-    	exit_code = p.poll()
-    	if exit_code == 0:
-        	print(colored('[+] Success', 'green'))
-        	print('\n')
-    	else:
-        	print(colored('[-] Failed with exit code ' + str(exit_code), 'red'))
+    		print(colored('\n' + str(cmd), 'green')) 
+    		p = process(cmd, shell=True)
+    		err = p.recvall()
+    		exit_code = p.poll()
+    		if exit_code == 0:
+        		print(colored('[+] Success', 'green'))
+        		print('\n')
+    		else:
+        		print(colored('[-] Failed with exit code ' + str(exit_code), 'red'))
 
 
 	# Generate a random 6 character filename to use
