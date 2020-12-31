@@ -1,0 +1,658 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>HTB SneakyMailer</title><style>
+
+body {
+
+	background-image: url('images/cool-background.PNG');
+	background-attachment: fixed;
+	color: #333;
+}
+
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+</style></head><body><article id="747168e6-bc3c-4f05-bf53-8f6aef7153a0" class="page sans"><header><h1 class="page-title">SneakyMailer</h1></header><div class="page-body"><figure id="a30bd221-fe30-419a-8c35-6eb61729f2db" class="image"><a href="images/sneaky/sneaky-header.PNG"><img style="width:536px" src="images/sneaky/sneaky-header.PNG"/></a></figure><figure id="34e2c6d4-ec62-4640-8c0d-249c4eb9ac3d" class="image"><a href="images/sneaky/nmap.PNG"><img style="width:816px" src="images/sneaky/nmap.PNG"/></a></figure><p id="9b9e706c-4c64-4d98-ba7e-addf4842844d" class="">
+</p><p id="9e989f5d-0127-4d1a-ba6d-d13f164236d4" class="">There is a public list of company emails on the port 80 webserver</p><figure id="dd29c943-e9e5-4c0b-ad72-f2dbc237f6f6" class="image"><a href="images/sneaky/sneaky-corp-home-page.PNG"><img style="width:1439px" src="images/sneaky/sneaky-corp-home-page.PNG"/></a></figure><p id="29654add-e39a-4161-8518-767294bca80e" class="">
+</p><p id="7c1a3a89-0c4f-45da-80f3-3c4bc8a65977" class="">Aside from this there is not much going on. I scanned all the other ports and didn&#x27;t find anything worth digging into. Considering the box is called &quot;SneakyMailer&quot; I started thinking maybe phishing was the way forward considering this list of emails. </p><p id="eea3a009-187c-419e-8293-7b66b7aa1bcf" class="">I sent out an email to everyone on the list found earlier, with the contents &quot;Checkout our new webserver <a href="http://10.10.14.29/">http://10.10.14.29</a>&quot; , and spun up a nc listener to see if we pick up any responses.</p><p id="f745dbf2-ef40-4b05-be8d-3b2af1d3e975" class="">
+</p><figure id="6414542a-c7e8-41f8-b8a3-389657e5480f" class="image"><a href="images/sneaky/swaks.PNG"><img style="width:1362px" src="images/sneaky/swaks.PNG"/></a></figure><figure id="e7a242a9-7eb3-4d0f-8596-09bdcba32a4e" class="image"><a href="images/sneaky/phished.PNG"><img style="width:1132px" src="images/sneaky/phished.PNG"/></a></figure><p id="43f58f34-10b2-4523-8976-1d06fc4a042a" class="">
+</p><p id="5a8fff46-d682-4f1b-931a-1b83ceb4d504" class="">Decoding this string yields -</p><pre id="d5cf87e1-226f-42ba-a113-2cbfdedc696e" class="code"><code>Username: paulbyrd@sneakymailer.htb
+Password: ^(#J@SkFv2[%KhIxKk(Ju`hqcHl&lt;:Ht</code></pre><p id="a06091b6-1f85-4262-89c0-437ef1c0dc42" class="">
+</p><p id="5949f874-f15b-463a-a3e1-272691a45798" class="">These are Paul&#x27;s email creds. I setup an email client with his details, and we are able to see the following 2 emails in sent folder</p><figure id="96a34fe1-6d8a-4c9e-9d55-c3526de0306d" class="image"><a href="images/sneaky/smtp-creds.PNG"><img style="width:1334px" src="images/sneaky/smtp-creds.PNG"/></a></figure><figure id="081ec9c7-642a-471d-ba6c-da77a6a2efbc" class="image"><a href="images/sneaky/smtp-info.PNG"><img style="width:1338px" src="images/sneaky/smtp-info.PNG"/></a></figure><p id="30d202cc-62ec-430b-a0cf-ac4298d8e3c7" class="">
+</p><p id="5c33cfd8-ce01-42fa-87df-fe67922ae677" class="">We got the dev user credentials</p><pre id="e9c44621-f3f6-4b56-b399-388b94a9b81b" class="code"><code>Username: developer
+Password: m^AsY7vTKVT+dV1{WOU%@NaHkUAId3]C</code></pre><p id="b18290f5-0afe-4524-a4e9-4edc7f981966" class="">
+</p><p id="dd031d8f-6b00-400a-a01e-7be9b0041c4e" class="">
+</p><p id="3b331471-ff62-4a0e-9d8b-5fe59623d747" class="">These creds worked on FTP. There is a /dev/ directory that appears to be the same directory that is served on &quot;<strong>dev.sneakycorp.htb&quot; - </strong> in theory we should be able to drop a reverse shell in /dev/, and request that page in the browser to trigger the reverse connection back to our machine.</p><p id="f0d3ee0e-1b5e-4bd8-8542-c489b8658ce5" class="">
+</p><figure id="770a8ccc-b68b-4bad-87e4-9820f69f8aaa" class="image"><a href="images/sneaky/ftp.PNG"><img style="width:616px" src="images/sneaky/ftp.PNG"/></a></figure><figure id="33d8a1b0-b288-4d18-be32-731409ed212f" class="image"><a href="images/sneaky/low-priv.PNG"><img style="width:747px" src="images/sneaky/low-priv.PNG"/></a></figure><p id="f32f6942-5df3-464f-a35e-27474a3d61db" class="">
+</p><p id="7c79988a-295f-4f66-8c4d-b3427a8bfef2" class="">We got a shell as www-data. We still cant access the user.txt though, we will need to pivot to user &quot;low&quot; in order to read it. One of the standard linux privesc scripts picks up an open .htpasswd file</p><figure id="c709c574-5099-4633-a13c-57c62b31ad41" class="image"><a href="images/sneaky/pypi-creds.PNG"><img style="width:751px" src="images/sneaky/pypi-creds.PNG"/></a></figure><p id="8673f83e-bf29-442d-94cd-ea0ee01d3b6d" class="">
+</p><p id="8ad3b33e-591f-4ff5-905d-7172b05749fb" class="">We can crack this with hashcat</p><figure id="ae740239-1843-48d8-89a9-d4bfcf83cb8c" class="image"><a href="images/sneaky/pypi-creds4.PNG"><img style="width:1244px" src="images/sneaky/pypi-creds4.PNG"/></a></figure><pre id="6a81300e-857f-43a6-8a6f-a20a4ddb2830" class="code"><code>username: pypi
+password: soufianeelhaoui</code></pre><p id="bd2393dc-2380-43ae-bcb8-05d39c7f9327" class="">
+</p><p id="2eb7257b-ba6c-4f09-83d6-7b2258e344b4" class="">This is for the port 8080 application, pypi.sneakycorp.htb</p><figure id="55ab5854-5fc6-4bd4-b4f9-ed657e0b778e" class="image"><a href="images/sneaky/pypi-home-page.PNG"><img style="width:923px" src="images/sneaky/pypi-home-page.PNG"/></a></figure><p id="e5d7e411-49d5-4973-bf2a-266b1257ef6c" class="">
+</p><p id="63466df1-ff5d-42e7-ac97-edaa01864fd3" class="">Remembering back to the email we previously discovered -
+</p><figure id="4ee908c6-23ee-4896-9e0d-d6e5c77b359b" class="image"><a href="images/sneaky/smtp-info%201.PNG"><img style="width:1338px" src="images/sneaky/smtp-info%201.PNG"/></a></figure><p id="bd9e4fab-d55f-4913-9885-c193ff5302bb" class="">Every package in this pypi repository is executed!!</p><p id="25e88af7-126f-4dfe-903d-6600c7e99a08" class="">
+</p><p id="c59fefd5-7334-4561-9ceb-8f9127dd20bc" class="">We can setup an evil pypi package which should execute our code under user lvl perms. According to pypi documentation, this involves setting up 2 files.</p><ul id="6b244773-b36f-476d-988c-3bfda6fd1fed" class="bulleted-list"><li>.pypirc       (config)</li></ul><ul id="1dfb1e53-ccc5-4a98-ae4b-a28c37fd90bc" class="bulleted-list"><li><a href="http://setup.py">setup.py</a>    (build script)</li></ul><p id="89335cab-acf4-4683-a2e3-df75c2b07b94" class="">
+</p><p id="8cdbcba4-a3dc-475d-ab27-5f238beb338e" class="">I setup the 2 files like so</p><figure id="ee0b0c6e-ee98-40ad-b70e-21bef7306248" class="image"><a href="images/sneaky/setup-py.PNG"><img style="width:562px" src="images/sneaky/setup-py.PNG"/></a></figure><figure id="76643ae8-02dd-4f79-855d-5d2700eaec92" class="image"><a href="images/sneaky/pypirc.PNG"><img style="width:553px" src="images/sneaky/pypirc.PNG"/></a></figure><p id="17eb1ac8-0685-4545-b64f-21466812eca1" class="">
+</p><p id="cdc8e1a9-ce5c-440c-a993-f40bcf0c9957" class="">And uploaded them to the pypi repository</p><figure id="fa08e9d8-3610-40b8-bfc0-9830e067332c" class="image"><a href="images/sneaky/pypi.PNG"><img style="width:1009px" src="images/sneaky/pypi.PNG"/></a></figure><p id="65502298-08f1-45b8-bb9c-79d2d8a4de34" class="">
+</p><p id="585423ca-0e39-4c47-a355-340a08a79f1a" class="">We got a shell back as user low</p><figure id="cfbdbc5e-d711-4edc-b47e-8763e024f53f" class="image"><a href="images/sneaky/user-txt.PNG"><img style="width:641px" src="images/sneaky/user-txt.PNG"/></a></figure><p id="a059ae89-6786-4176-bb04-7eb9a9c5785c" class="">
+</p><p id="22f68204-3665-4d82-a77d-93e75ddcd06c" class="">
+</p><p id="c2eca03d-7347-4b9f-bb6b-8e7018e432f1" class="">User low has sudo permissions on pip3, this can be exploited using gtfobins to obtain root lvl access.</p><p id="ce18a7d2-65b8-4523-83d7-ddd385dc8551" class=""> </p><figure id="bb92f10c-2f40-4598-b868-4f1cc93b622b" class="image"><a href="images/sneaky/gtfo-bins.PNG"><img style="width:895px" src="images/sneaky/gtfo-bins.PNG"/></a></figure><figure id="87915130-3c4a-42fa-a77e-78a02e710120" class="image"><a href="images/sneaky/sudo-perms.PNG"><img style="width:737px" src="images/sneaky/sudo-perms.PNG"/></a></figure><figure id="4698e41c-ec83-46ae-9a52-b0bbd3f2da76" class="image"><a href="images/sneaky/root.PNG"><img style="width:956px" src="images/sneaky/root.PNG"/></a></figure></div></article></body></html>
